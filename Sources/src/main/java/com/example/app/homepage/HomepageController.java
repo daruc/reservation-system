@@ -17,4 +17,10 @@ public class HomepageController {
 	public String showSignUp() {
 		return "homepage/sign_up";
 	}
+	
+	@RequestMapping("reserve/time")
+	public String showReservationTime(Model model) {
+		model.addAttribute("title", "Reserve time");
+		return "reservation/time";
+	}
 }

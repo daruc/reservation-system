@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.thymeleaf.org" >
+	<head th:replace="fragments/main :: materialize_head"></head>
+	<body>
+		
+		<!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+
+		<span th:replace="fragments/main :: header"></span>
+    <!-- Navbar goes here -->
+    <!-- Page Layout here -->
+    <div class="row">
+
+	<div class="col s12 teal ligthen-3">
+
+	<div class="row">
+		<div class="col hide-on-med-and-up">
+			<a class="btn btn-floating "><i class="material-icons ">menu</i></a>
+		</div>
+	<div class="col">
+	real navbar
+	</div>
+	</div>
+	</div>
+	
+      <div class="nav-panel col m3 l2 xl1 teal lighten-2 hide-on-small-only">
+        <!-- Grey navigation panel -->
+		
+    
+      <div class="collection ">
+        <a href="#!" class="collection-item">Alvin</a>
+        <a href="#!" class="collection-item active">Alvin</a>
+        <a href="#!" class="collection-item">Alvin</a>
+        <a href="#!" class="collection-item">Alvin</a>
+      </div>
+            
+            
+      </div>
+
+      <div class="col s12 m9 l10 xl11 teal lighten-5">
+        <!-- Teal page content  -->
+
+	
+
+teal page content
+      </div>
+
+	<div class="col s12">
+        <a href="#!" class="breadcrumb">First</a>
+        <a href="#!" class="breadcrumb">Second</a>
+        <a href="#!" class="breadcrumb">Third</a>
+      </div>
+
+    </div>
+		
+		<span th:replace="fragments/main :: footer"></span>
+	</body>
+</html>
