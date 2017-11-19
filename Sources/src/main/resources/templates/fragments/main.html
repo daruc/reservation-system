@@ -1,30 +1,93 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:fragment="materialize_head">
-	<meta charset="UTF-8" />
-		<!--Import Google Icon Font-->
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-			rel="stylesheet" />
-		<!--Import materialize.css-->
-		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"
-			media="screen,projection" />
-		
-		<!--Let browser know website is optimized for mobile-->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title th:text="${title}"></title>
-	</head>
 
-  <body>
-  
-  	<header th:fragment="header">
-  		header!!!
-  	</header>
-  
-    <footer th:fragment="footer">
-      footer!!!!!
-    </footer>
-  
-  </body>
-  
+<head th:fragment="materialize_head">
+
+<meta charset="UTF-8" />
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" />
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" href="../css/materialize.min.css"
+	media="screen,projection" />
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title th:text="${title}"></title>
+
+<style>
+body {
+	background-color: #004d40;
+}
+</style>
+</head>
+
+<body>
+
+	<nav th:fragment="header">
+		<div class="nav-wrapper teal darken-4">
+			<ul th:if="${logged == true}" id="nav-mobile"
+				class="left hide-on-med-and-down">
+				<li><a class="waves-effect waves-light btn"><i
+						class="material-icons">home</i></a></li>
+				<li><a class="waves-effect waves-light btn"><i
+						class="material-icons">list</i></a></li>
+				<li><a class="waves-effect waves-light btn"><i
+						class="material-icons">settings</i></a></li>
+			</ul>
+			<a href="/" class="brand-logo center">Reservation System</a>
+			<ul th:if="${logged}" id="nav-mobile" class="right hide-on-med-and-down">
+				<li class="hide-on-med-and-down" th:text="${user.getFullname()}">Name
+					Surname</li>
+				<li><a href="logout" class="waes-effect waves-light btn">Logout</a></li>
+			</ul>
+
+			<form th:if="${!logged}" action="login" method="post" th:object="${login_form_model}">
+			<ul class="right hide-on-med-and-down">
+				<li>
+					<div class="input-field inline">
+						<input id="login_field" type="text" class="validate" th:field="*{login}">
+						<label for="login_field">Login</label>
+					</div>
+				</li>
+				
+				<li>
+					<div class="input-field inline">
+						<input id="password_field" type="password" class="validate" th:field="*{password}">
+						<label for="password_field">Password</label>
+					</div>
+				</li>
+				
+				<li><input type="submit" class="waes-effect waves-light btn"></li>
+			</ul>
+			</form>
+		</div>
+	</nav>
+
+	<div th:fragment="breadcrumbs" class="col s12">
+
+		<nav>
+			<div class="nav-wrapper ">
+				<div class="col teal darken-1 s12">
+					<a th:each="breadcrumb : ${navigation}"
+						th:href="${breadcrumb.address}" class="breadcrumb"><span
+						th:text="${breadcrumb.description}"></span></a>
+				</div>
+			</div>
+		</nav>
+
+	</div>
+	
+	<div th:if="${logged}" th:fragment="homepage-panel">
+		homepage panel
+	</div>
+
+
+	<footer th:fragment="footer" class="col teal lighten-3 s12">
+		<span class="flow-text">Footer</span>
+	</footer>
+
+</body>
+
 </html>

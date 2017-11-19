@@ -1,58 +1,46 @@
-<html xmlns:th="http://www.thymeleaf.org" >
-	<head th:replace="fragments/main :: materialize_head"></head>
-	<body>
-		
-		<!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-      <script type="text/javascript" src="js/materialize.min.js"></script>
+<!DOCTYPE html>
 
-		<span th:replace="fragments/main :: header"></span>
-    <!-- Navbar goes here -->
-    <!-- Page Layout here -->
-    <div class="row">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/main :: materialize_head"></head>
+<body>
 
-	<div class="col s12 teal ligthen-3">
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../js/materialize.min.js"></script>
 
-	<div class="row">
-		<div class="col hide-on-med-and-up">
-			<a class="btn btn-floating "><i class="material-icons ">menu</i></a>
+	<span th:replace="fragments/main :: header"> </span>
+	<span th:replace="fragments/main :: breadcrumbs"> </span>
+
+	<div class="col grey lighten-4 l12 center-align">
+		<div class="container">
+			<!-- Main content here -->
+			<form action="/create_user" th:object="${form_model}" method="post">
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="sign-up-form-login" type="text" class="validate" th:field="*{login}">
+						<label for="sign-up-form-login">Login </label>
+					</div>
+					<div class="input-field col s12">
+						<input id="sign-up-form-password" type="password" class="validate" th:field="*{password}">
+						<label for="sign-up-form-password">Password </label>
+					</div>
+					<div class="input-field col s12">
+						<input id="sign-up-form-name" type="text" class="validate" th:field="*{name}">
+						<label for="sign-up-form-name">Name </label>
+					</div>
+					<div class="input-field col s12">
+						<input id="sign-up-form-surname" type="text" class="validate" th:field="*{surname}">
+						<label for="sign-up-form-surname">Surname </label>
+					</div>
+				</div>
+				<input type="submit"
+				class="waves-effect waves-light btn center">
+			</form>
+			<!--  -->
 		</div>
-	<div class="col">
-	real navbar
 	</div>
-	</div>
-	</div>
-	
-      <div class="nav-panel col m3 l2 xl1 teal lighten-2 hide-on-small-only">
-        <!-- Grey navigation panel -->
-		
-    
-      <div class="collection ">
-        <a href="#!" class="collection-item">Alvin</a>
-        <a href="#!" class="collection-item active">Alvin</a>
-        <a href="#!" class="collection-item">Alvin</a>
-        <a href="#!" class="collection-item">Alvin</a>
-      </div>
-            
-            
-      </div>
 
-      <div class="col s12 m9 l10 xl11 teal lighten-5">
-        <!-- Teal page content  -->
-
-	
-
-teal page content
-      </div>
-
-	<div class="col s12">
-        <a href="#!" class="breadcrumb">First</a>
-        <a href="#!" class="breadcrumb">Second</a>
-        <a href="#!" class="breadcrumb">Third</a>
-      </div>
-
-    </div>
-		
-		<span th:replace="fragments/main :: footer"></span>
-	</body>
+	<span th:replace="fragments/main :: footer"></span>
+</body>
 </html>
