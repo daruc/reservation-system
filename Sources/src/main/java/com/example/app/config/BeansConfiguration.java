@@ -16,6 +16,4 @@ public class BeansConfiguration {
 	Dao getDato(DataSource dataSource) {
 		return new Dao(dataSource);
 	}
-	
-	
 }

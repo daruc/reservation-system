@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/main :: materialize_head"></head>
+<body>
+
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../js/materialize.min.js"></script>
+
+	<span th:replace="fragments/main :: header"> </span>
+	<span th:replace="fragments/main :: breadcrumbs"> </span>
+
+	<div class="col grey lighten-4 l12 center-align">
+		<div class="container">
+			<!-- Main content here -->
+			Settings
+		</div>
+	</div>
+
+	<span th:replace="fragments/main :: footer"></span>
+</body>
+</html>

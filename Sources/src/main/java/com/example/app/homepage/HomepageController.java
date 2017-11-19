@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.app.core.Dao;
+import com.example.app.core.Link;
+import com.example.app.core.NavigationBarController;
 
 @Controller
 public class HomepageController {
@@ -28,13 +30,13 @@ public class HomepageController {
 	}
 	
 	@ModelAttribute
-	public CreateUserModel createCreateUserModel() {
-		CreateUserModel model = new CreateUserModel(dao);
+	public UserModel createCreateUserModel() {
+		UserModel model = new UserModel(dao);
 		return model;
 	}
 
 	@PostMapping("create_user")
-	public String createUser(@ModelAttribute CreateUserModel createUserModel) {
+	public String createUser(@ModelAttribute UserModel createUserModel) {
 		createUserModel.createUser();
 		return "redirect:/";
 	}
@@ -47,7 +49,6 @@ public class HomepageController {
 	@PostMapping("login")
 	public String login(@ModelAttribute LoginModel loginModel) {
 		if (loginModel.isCorrect()) {
-			httpSession.setAttribute("is_logged", true);
 			httpSession.setAttribute("login", loginModel.getLogin());
 		}
 		return "redirect:/";
@@ -55,53 +56,36 @@ public class HomepageController {
 	
 	@GetMapping("logout")
 	public String logout() {
-		httpSession.removeAttribute("is_logged");
-		httpSession.removeAttribute("login");
+		httpSession.invalidate();
 		return "redirect:/";
 	}
 	
-	//==============================================================
 	@RequestMapping("/")
 	public String showHomepage(Model model) {
-		model.addAttribute("title", "Reserve time");
-		Object isLogged = httpSession.getAttribute("is_logged");
-		if (isLogged != null) {
-			model.addAttribute("logged", (Boolean) isLogged);
-		} else {
-			model.addAttribute("logged", false);
-		}
-		Link home = new Link();
-		home.address = "/addr/to/home";
-		home.description = "Home";
-		List<Link> navigation = Arrays.asList(home, home, home);
-		model.addAttribute("navigation", navigation);
-		User user = new User();
-		user.name = (String) httpSession.getAttribute("login");
-		user.surname = "surname error!";
-		model.addAttribute("user", user);
-		model.addAttribute("login_form_model", new LoginModel(dao));
+		model.addAttribute("title", "Reservation System");
+		NavigationBarController navigationBar = new NavigationBarController(httpSession, model, dao);
+		navigationBar.addBreadcrumb("/", "Home");
+		navigationBar.update();
+		
 		return "homepage/homepage";
 	}
 	
 	@RequestMapping("/sign_up")
 	public String showSignUp(Model model) {
-		model.addAttribute("title", "Reserve time");
-		model.addAttribute("logged", false);
-		Link home = new Link();
-		home.address = "/addr/to/home";
-		home.description = "Home";
-		List<Link> navigation = Arrays.asList(home, home, home);
-		model.addAttribute("navigation", navigation);
-		User user = new User();
-		user.name = "Dariusz";
-		user.surname = "Ruchała";
-		model.addAttribute("user", user);
-		model.addAttribute("form_model", new CreateUserModel(dao));
-		model.addAttribute("login_form_model", new LoginModel(dao));
+		model.addAttribute("title", "Reservation System - Sign up");
+		
+		NavigationBarController navigationBar = new NavigationBarController(httpSession, model, dao);
+		navigationBar.addBreadcrumb("/", "Home");
+		navigationBar.addBreadcrumb("sign_up", "Sign up");
+		navigationBar.update();
+		
+		model.addAttribute("form_model", new UserModel(dao));
 
 		return "homepage/sign_up";
 	}
 	
+	//==============================================================
+
 	@RequestMapping("reserve/time")
 	public String showReservationTime(Model model) {
 		model.addAttribute("title", "Reserve time");
@@ -117,11 +101,6 @@ public class HomepageController {
 		model.addAttribute("user", user);
 		
 		return "reservation/time";
-	}
-	
-	public class Link {
-		public String address;
-		public String description;
 	}
 	
 	public class User {

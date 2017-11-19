@@ -2,7 +2,7 @@ package com.example.app.homepage;
 
 import com.example.app.core.Dao;
 
-public class CreateUserModel {
+public class UserModel {
 	private Dao dao;
 	
 	private String login;
@@ -10,7 +10,7 @@ public class CreateUserModel {
 	private String name;
 	private String surname;
 	
-	public CreateUserModel(Dao dao) {
+	public UserModel(Dao dao) {
 		this.dao = dao;
 	}
 	
@@ -37,6 +37,12 @@ public class CreateUserModel {
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	public String getFullname() {
+		if (name == null && surname == null) {
+			return login;
+		}
+		return name + ' ' + surname;
 	}
 
 	public boolean createUser() {

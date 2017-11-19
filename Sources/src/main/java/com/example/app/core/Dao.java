@@ -7,8 +7,8 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.app.homepage.CreateUserModel;
 import com.example.app.homepage.LoginModel;
+import com.example.app.homepage.UserModel;
 
 public class Dao {
 	private DataSource dataSource;
@@ -18,7 +18,7 @@ public class Dao {
 		this.dataSource = dataSource;
 	}
 	
-	public boolean createUser(CreateUserModel userFormModel) {
+	public boolean createUser(UserModel userFormModel) {
 		String sql = new StringBuilder()
 				.append("insert into users(login, password, name, surname) values('")
 				.append(userFormModel.getLogin())
@@ -59,4 +59,24 @@ public class Dao {
 		return false;
 	}
 
+	public UserModel getUser(String login) {
+		String sql = new StringBuilder()
+				.append("select password, name, surname from users where login = '")
+				.append(login)
+				.append("';")
+				.toString();
+		try {
+			ResultSet resultSet = dataSource.getConnection().prepareStatement(sql).executeQuery();
+			resultSet.next();
+			UserModel user = new UserModel(this);
+			user.setLogin(login);
+			user.setPassword(resultSet.getString("password"));
+			user.setName(resultSet.getString("name"));
+			user.setSurname(resultSet.getString("surname"));
+			return user;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
