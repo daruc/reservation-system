@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.app.homepage.LoginModel;
 import com.example.app.homepage.UserModel;
+import com.example.app.settings.UsersGroupModel;
 
 public class Dao {
 	private DataSource dataSource;
@@ -20,7 +21,7 @@ public class Dao {
 	
 	public boolean createUser(UserModel userFormModel) {
 		String sql = new StringBuilder()
-				.append("insert into users(login, password, name, surname) values('")
+				.append("insert into users(login, password, name, surname, permissions) values('")
 				.append(userFormModel.getLogin())
 				.append("', '")
 				.append(userFormModel.getPassword())
@@ -28,13 +29,14 @@ public class Dao {
 				.append(userFormModel.getName())
 				.append("', '")
 				.append(userFormModel.getSurname())
-				.append("');")
+				.append("', 0);")
 				.toString();
 		
 		try {
 			return dataSource.getConnection().prepareStatement(sql)
 			.execute();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -78,5 +80,22 @@ public class Dao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public boolean createUsersGroup(UsersGroupModel usersGroup) {
+		String sql = new StringBuilder()
+				.append("insert into groups(name, description) values('")
+				.append(usersGroup.getName())
+				.append("', '")
+				.append(usersGroup.getDescription())
+				.append("');")
+				.toString();
+		
+		try {
+			return dataSource.getConnection().prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

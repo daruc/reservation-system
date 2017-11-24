@@ -15,11 +15,24 @@
 	<div class="col grey lighten-4 l12 center-align">
 		<div id="main-section" class="container">
 			<!-- Main content here -->
-			<h4>Settings</h4>
+			
+			<h4>Create new Users' Group</h4>
 			<div class="divider"></div>
-				<a class="waves-effect waves-light btn" href="/settings/create_users_group">New group</a>
-				<a class="waves-effect waves-light btn" href="/assing_to_group">Assign user to group</a>
-			</div>
+			<form action="/users_group" method="post" th:object="${form_model}">
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="create-users-group-form-name" type="text" th:field="*{name}">
+						<label for="create-users-group-form-name">Name</label>
+					</div>
+					<div class="input-field col s12">
+						<textarea th:field="*{description}"
+							id="create-users-group-form-description" class="materialize-textarea">
+						</textarea>
+						<label for="create-users-group-form-description">Description</label>
+					</div>
+				</div>
+				<button type="submit" class="waves-effect waves-light btn center">Create</button>
+			</form>
 		</div>
 	</div>
 

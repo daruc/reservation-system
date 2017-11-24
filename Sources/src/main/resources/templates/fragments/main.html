@@ -30,6 +30,15 @@ footer {
 	font-size: 16pt;
 }
 
+#main-section {
+	padding-top: 8pt;
+	padding-bottom: 8pt;
+}
+
+#breadcrumbs {
+	padding-left: 8pt;
+}
+
 </style>
 </head>
 
@@ -52,7 +61,7 @@ footer {
 			<ul th:if="${logged}" id="nav-mobile" class="right">
 				<li th:text="${user.getFullname()}">Name
 					Surname</li>
-				<li><a href="logout" class="waes-effect waves-light btn">Logout</a></li>
+				<li><a href="/logout" class="waes-effect waves-light btn">Logout</a></li>
 			</ul>
 
 			<form th:if="${!logged}" action="login" method="post" th:object="${login_form_model}">
@@ -81,7 +90,7 @@ footer {
 
 		<nav>
 			<div class="nav-wrapper ">
-				<div class="col teal darken-1 s12">
+				<div id="breadcrumbs" class="col teal darken-1 s12">
 					<a th:each="breadcrumb : ${navigation}"
 						th:href="${breadcrumb.address}" class="breadcrumb"><span
 						th:text="${breadcrumb.description}"></span></a>
