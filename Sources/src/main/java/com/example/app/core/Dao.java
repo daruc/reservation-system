@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.app.homepage.LoginModel;
 import com.example.app.homepage.UserModel;
+import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
 public class Dao {
@@ -200,5 +201,60 @@ public class Dao {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public boolean createResource(ResourceModel resource) {
+		boolean result = true;
+		String sql = new StringBuilder("insert into resource_groups(name, description) values('")
+				.append(resource.getName())
+				.append("', '")
+				.append(resource.getDescription())
+				.append("');")
+				.toString();
+		
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public List<ResourceModel> getAllResources() {
+		List<ResourceModel> resources = new ArrayList<>();
+		String sql = "select id, name, description from resource_groups;";
+		try (Connection con = dataSource.getConnection()) {
+			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
+			while (resultSet.next()) {
+				ResourceModel resource = new ResourceModel();
+				resource.setId(resultSet.getInt("id"));
+				resource.setName(resultSet.getString("name"));
+				resource.setDescription(resultSet.getString("description"));
+				resources.add(resource);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resources;
+	}
+	
+	public ResourceModel getResource(int id) {
+		String sql = new StringBuilder("select name, description from resource_groups where id=")
+				.append(id)
+				.append(";")
+				.toString();
+
+		try (Connection con = dataSource.getConnection()) {
+			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
+			resultSet.next();
+			ResourceModel resource = new ResourceModel();
+			resource.setName(resultSet.getString("name"));
+			resource.setDescription(resultSet.getString("description"));
+			return resource;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

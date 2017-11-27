@@ -16,20 +16,18 @@
 		<div id="main-section" class="container">
 			<!-- Main content here -->
 			
-			<h4>Create new Users' Group</h4>
+			<h4>Create new Resource</h4>
 			<div class="divider"></div>
-			<form action="/users_group" method="post" th:object="${form_model}">
-				<div class="row">
-					<div class="input-field col s12">
-						<input id="create-users-group-form-name" type="text" th:field="*{name}">
-						<label for="create-users-group-form-name">Name</label>
-					</div>
-					<div class="input-field col s12">
-						<textarea th:field="*{description}"
-							id="create-users-group-form-description" class="materialize-textarea">
-						</textarea>
-						<label for="create-users-group-form-description">Description</label>
-					</div>
+			<form action="/settings/create_resource" method="post" th:object="${resource}">
+				<div class="input-field col s12">
+					<input id="field-name" type="text" th:field="*{name}"/>
+					<label for="field-name">Name</label>
+				</div>
+				<div class="input-field col s12">
+					<textarea class="materialize-textarea"
+						 id="field-description" th:field="*{description}">
+						 </textarea>
+					<label for="field-description">Description</label>
 				</div>
 				<button type="submit" class="waves-effect waves-light btn center">Create</button>
 			</form>
