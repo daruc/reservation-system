@@ -7,7 +7,7 @@
 	<!--Import jQuery before materialize.js-->
 	<script type="text/javascript"
 		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="../js/materialize.min.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
 
 	<span th:replace="fragments/main :: header"> </span>
 	<span th:replace="fragments/main :: breadcrumbs"> </span>
@@ -15,10 +15,13 @@
 	<div class="col grey lighten-4 l12 center-align">
 		<div id="main-section" class="container">
 			<!-- Main content here -->
-			<h4>Settings</h4>
+			<h4>Users Groups</h4>
 			<div class="divider"></div>
-				<a class="waves-effect waves-light btn"	href="/settings/create_users_group">New group</a>
-				<a class="waves-effect waves-light btn" href="/settings/users_groups_list">Groups list</a>
+			<div class="collection">
+				<a th:href="${'/settings/users_group_details/?id=' + users_group.getId()}"
+					class="collection-item"
+					 th:each="users_group : ${users_groups_list}" th:text="${users_group.getName()}"></a>
+			</div>
 		</div>
 	</div>
 

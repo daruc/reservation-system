@@ -7,7 +7,7 @@
 	<!--Import jQuery before materialize.js-->
 	<script type="text/javascript"
 		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="../js/materialize.min.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
 
 	<span th:replace="fragments/main :: header"> </span>
 	<span th:replace="fragments/main :: breadcrumbs"> </span>
@@ -15,10 +15,17 @@
 	<div class="col grey lighten-4 l12 center-align">
 		<div id="main-section" class="container">
 			<!-- Main content here -->
-			<h4>Settings</h4>
+			<h4>Add user to group</h4>
 			<div class="divider"></div>
-				<a class="waves-effect waves-light btn"	href="/settings/create_users_group">New group</a>
-				<a class="waves-effect waves-light btn" href="/settings/users_groups_list">Groups list</a>
+			<form th:action="'/settings/add_user_to_group?group_id=' + ${groupId}" method="post">
+				<p th:each="user : ${users}">
+					<input type="checkbox" name="checkboxes" th:id="${user.getId()}"
+						th:value="${user.getId()}"/>
+					<label th:for="${user.getId()}" th:text="${user.getLogin()}"></label>
+				</p>
+				<button type="submit"
+				class="waves-effect waves-light btn center">Add</button>
+			</form>
 		</div>
 	</div>
 
