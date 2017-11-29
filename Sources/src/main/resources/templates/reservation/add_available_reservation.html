@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/main :: materialize_head"></head>
+<body>
+
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../js/materialize.min.js"></script>
+	
+	<script>
+	  $(document).ready(function() {
+		    $('select').material_select();
+		  });
+	</script>
+
+	<span th:replace="fragments/main :: header"> </span>
+	<span th:replace="fragments/main :: breadcrumbs"> </span>
+
+	<div class="col grey lighten-4 l12 center-align">
+		<div id="main-section" class="container">
+			<!-- Main content here -->
+			<h4>Add an available resource to reservation</h4>
+			<div class="divider"></div>
+			<div class="row">
+				<form th:action="${'/add_available_reservations?reservation_id=' + reservation_id}" method="post" th:object="${available_reservations}">
+					<div class="col input-field l12" th:each="reservation, stat : *{availableReservations}">
+						<input type="text" class="validate"
+							th:field="*{availableReservations[__${stat.index}__].label}"/>
+						<label>Available Resource</label>
+					</div>
+					<button class="btn waves-effect light-waves" type="submit">Create</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<span th:replace="fragments/main :: footer"></span>
+</body>
+</html>

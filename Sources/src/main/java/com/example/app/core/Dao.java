@@ -1,6 +1,7 @@
 package com.example.app.core;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.app.homepage.LoginModel;
 import com.example.app.homepage.UserModel;
+import com.example.app.reservation.AvailableReservationModel;
+import com.example.app.reservation.ReservationModel;
 import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
@@ -66,7 +69,7 @@ public class Dao {
 
 	public UserModel getUser(String login) {
 		String sql = new StringBuilder()
-				.append("select password, name, surname from users where login = '")
+				.append("select id, password, name, surname from users where login = '")
 				.append(login)
 				.append("';")
 				.toString();
@@ -78,6 +81,7 @@ public class Dao {
 			user.setPassword(resultSet.getString("password"));
 			user.setName(resultSet.getString("name"));
 			user.setSurname(resultSet.getString("surname"));
+			user.setId(resultSet.getInt("id"));
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -256,5 +260,49 @@ public class Dao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public boolean createReservation(ReservationModel reservation) {
+		boolean result = true;
+		String sql = new StringBuilder(
+				"insert into reservations(name, description, group_id, author_id, resource_id) values('")
+				.append(reservation.getName())
+				.append("', '")
+				.append(reservation.getDescription())
+				.append("', ")
+				.append(reservation.getGroupId())
+				.append(", ")
+				.append(reservation.getAuthorId())
+				.append(", ")
+				.append(reservation.getResourceId())
+				.append(");")
+				.toString();
+		String sqlId = "select currval(pg_get_serial_sequence('reservations', 'id'));";
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql).execute();
+			ResultSet resultSet = con.prepareStatement(sqlId).executeQuery();
+			resultSet.next();
+			reservation.setId(resultSet.getInt(1));
+		} catch(SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean createAvailableReservation(AvailableReservationModel reservation) {
+		boolean result = true;
+		String sql = "insert into made_reservations(label, reservation_id)"
+				+ " values(?, ?);";
+		try (Connection con = dataSource.getConnection()) {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setString(1, reservation.getLabel());
+			stm.setInt(2, reservation.getReservationId());
+			stm.execute();
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

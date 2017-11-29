@@ -22,8 +22,8 @@ create table user_group(
 create table made_reservations(
 	id serial primary key,
 	reservation_id integer not null,
-	user_id integer,
-	resource_id integer not null
+	label varchar(100),
+	user_id integer
 );
 
 create table resource_groups(
@@ -43,7 +43,8 @@ create table reservations(
 	name varchar(100) not null,
 	description varchar(4000),
 	group_id integer not null,
-	author_id integer not null
+	author_id integer not null,
+	resource_id integer not null
 );
 
 
