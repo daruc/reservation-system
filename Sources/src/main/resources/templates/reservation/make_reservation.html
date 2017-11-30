@@ -15,16 +15,7 @@
 	<div class="col grey lighten-4 l12 center-align">
 		<div id="main-section" class="container">
 			<!-- Main content here -->
-			<h4>Reservations</h4>
-			<div class="divider"></div>
-			<h5>Actions</h5>
-			<a href="/create_reservation" class="waves-effect waves-light btn">Add new Reservation</a>
-			<div class="divider"></div>
-			<h5>List</h5>
-			<div class="collection">
-				<a th:href="${'/make_reservation?id=' + reservation.getId()}" class="collection-item"
-					 th:each="reservation : ${reservations}" th:text="${reservation.getName()}"></a>
-			</div>
+			
 		</div>
 	</div>
 

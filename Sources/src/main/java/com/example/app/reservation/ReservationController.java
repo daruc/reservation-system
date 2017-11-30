@@ -34,16 +34,21 @@ public class ReservationController {
 	
 	@RequestMapping("/list")
 	public String showList(Model model) {
-		if (httpSession.getAttribute("login") == null) {
+		String login = (String) httpSession.getAttribute("login");
+		if (login == null) {
 			return "redirect:/";
 		}
 		
-		model.addAttribute("title", "List");
+		model.addAttribute("title", "Reservations list");
 		
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
 		navigation.addBreadcrumb("/", "Home");
-		navigation.addBreadcrumb("/list", "List");
+		navigation.addBreadcrumb("/list", "Reservations list");
 		navigation.update();
+		
+		int userId = dao.getUser(login).getId();
+		List<ReservationModel> reservations = dao.getReservationsForUser(userId);
+		model.addAttribute("reservations", reservations);
 		
 		return "/reservation/list";
 	}

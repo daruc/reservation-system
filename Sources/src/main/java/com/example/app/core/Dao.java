@@ -61,7 +61,6 @@ public class Dao {
 			int count = resultSet.getInt(1);
 			return count == 1;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -304,5 +303,27 @@ public class Dao {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public List<ReservationModel> getReservationsForUser(int userId) {
+		List<ReservationModel> reservations = new ArrayList<>();
+		String sql = "select r.id, r.name"
+				+ " from reservations as r inner join user_group as ug on r.group_id = ug.group_id"
+				+ " where ug.user_id = ?;";
+		
+		try (Connection con = dataSource.getConnection()) {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, userId);
+			ResultSet resultSet = stm.executeQuery();
+			while (resultSet.next()) {
+				ReservationModel reservation = new ReservationModel();
+				reservation.setId(resultSet.getInt("id"));
+				reservation.setName(resultSet.getString("name"));
+				reservations.add(reservation);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return reservations;
 	}
 }
