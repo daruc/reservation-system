@@ -1,11 +1,15 @@
 package com.example.app.reservation;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.Dao;
@@ -34,7 +38,22 @@ public class MakeReservationController {
 		navigation.addBreadcrumb("/make_reservation", "Make reservation");
 		navigation.update();
 		
+		ReservationModel reservation = dao.getReservation(id);
+		model.addAttribute("reservation", reservation);
+		
+		List<AvailableReservationModel> availableReservations = dao.getAvailableReservations(id);
+		model.addAttribute("av_reservations", availableReservations);
+		
 		return "/reservation/make_reservation";
+	}
+	
+	@GetMapping("/reserve")
+	public String makeReservations(@RequestParam(name="id", required=true) int availableReservationId,
+			Model model) {
+		String login = (String) httpSession.getAttribute("login");
+		int userId = dao.getUser(login).getId();
+		dao.makeReservation(userId, availableReservationId);
+		return "redirect:/list";
 	}
 
 }

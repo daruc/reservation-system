@@ -28,7 +28,7 @@
 					<div class="col input-field l12" th:each="reservation, stat : *{availableReservations}">
 						<input type="text" class="validate"
 							th:field="*{availableReservations[__${stat.index}__].label}"/>
-						<label>Available Resource</label>
+						<label>Available Reservation</label>
 					</div>
 					<button class="btn waves-effect light-waves" type="submit">Create</button>
 				</form>

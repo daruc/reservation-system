@@ -15,7 +15,24 @@
 	<div class="col grey lighten-4 l12 center-align">
 		<div id="main-section" class="container">
 			<!-- Main content here -->
+			<h4>Make reservation</h4>
 			
+			<div class="divider"></div>
+			<h5>Details</h5>
+			<div class="left-align">
+				<p>Name: <span th:text="${reservation.getName()}"></span></p>
+				<p>Description: <span th:text="${reservation.getDescription()}"></span></p>
+			</div>
+			
+			<div class="divider"></div>
+			<h5>Available reservations</h5>
+			<div class="collection">
+				<a th:each="av_reservation : ${av_reservations}"
+					th:text="${av_reservation.getLabel()}"
+					class="collection-item"
+					th:href="${'/reserve?id=' + av_reservation.getId()}"
+					></a>
+			</div>
 		</div>
 	</div>
 

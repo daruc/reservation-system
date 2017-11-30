@@ -326,4 +326,58 @@ public class Dao {
 		}
 		return reservations;
 	}
+	
+	public ReservationModel getReservation(int reservationId) {
+		String sql = "select name, description from reservations where id = ?";
+		ReservationModel reservation = null;
+		try (Connection con = dataSource.getConnection()) {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, reservationId);
+			ResultSet resultSet = stm.executeQuery();
+			resultSet.next();
+			reservation = new ReservationModel();
+			reservation.setId(reservationId);
+			reservation.setName(resultSet.getString("name"));
+			reservation.setDescription(resultSet.getString("description"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return reservation;
+	}
+	
+	public List<AvailableReservationModel> getAvailableReservations(int reservationId) {
+		String sql = "select id, label from made_reservations"
+				+ " where user_id is null and reservation_id = ?";
+		List<AvailableReservationModel> availableReservations = new ArrayList<>();
+		try (Connection con = dataSource.getConnection()) {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, reservationId);
+			ResultSet resultSet = stm.executeQuery();
+			while (resultSet.next()) {
+				AvailableReservationModel availableReservation = new AvailableReservationModel();
+				availableReservation.setId(resultSet.getInt("id"));
+				availableReservation.setReservationId(reservationId);
+				availableReservation.setLabel(resultSet.getString("label"));
+				availableReservations.add(availableReservation);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return availableReservations;
+	}
+	
+	public boolean makeReservation(int userId, int availableReservationId) {
+		boolean result = true;
+		String sql = "update made_reservations set user_id = ? where id = ?;";
+		try (Connection con = dataSource.getConnection()) {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, userId);
+			stm.setInt(2, availableReservationId);
+			stm.execute();
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
