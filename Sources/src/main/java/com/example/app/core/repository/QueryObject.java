@@ -14,6 +14,7 @@ public class QueryObject<T> {
 	private QueryObject(QueryObjectBuilder<T> builder) {
 		this.repository = builder.getRepository();
 		this.domainModel = builder.getDomainModel();
+		this.criteria = builder.getCriteria();
 	}
 	
 	public List<T> execute() {

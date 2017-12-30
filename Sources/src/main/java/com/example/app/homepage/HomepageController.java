@@ -16,28 +16,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.app.core.Link;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.repository.Dao;
+import com.example.app.core.repository.Repository;
 
 @Controller
 public class HomepageController {
 	
+	private Repository repository;
 	private Dao dao;
 	private HttpSession httpSession;
 	
 	@Autowired
-	public HomepageController(Dao dao, HttpSession httpSession) {
+	public HomepageController(Repository repository, Dao dao, HttpSession httpSession) {
+		this.repository = repository;
 		this.dao = dao;
 		this.httpSession = httpSession;
 	}
 	
 	@ModelAttribute
 	public UserModel createCreateUserModel() {
-		UserModel model = new UserModel(dao);
+		UserModel model = new UserModel();
 		return model;
 	}
 
 	@PostMapping("create_user")
 	public String createUser(@ModelAttribute UserModel createUserModel) {
-		createUserModel.createUser();
+		dao.createUser(createUserModel);
 		return "redirect:/";
 	}
 	
@@ -79,7 +82,7 @@ public class HomepageController {
 		navigationBar.addBreadcrumb("sign_up", "Sign up");
 		navigationBar.update();
 		
-		model.addAttribute("form_model", new UserModel(dao));
+		model.addAttribute("form_model", new UserModel());
 
 		return "homepage/sign_up";
 	}

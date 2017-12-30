@@ -5,7 +5,6 @@ import java.util.Optional;
 import com.example.app.core.repository.Dao;
 
 public class UserModel {
-	private Dao dao;
 	
 	private int id;
 	private Optional<Integer> groupId = Optional.empty();
@@ -14,9 +13,6 @@ public class UserModel {
 	private String name;
 	private String surname;
 	
-	public UserModel(Dao dao) {
-		this.dao = dao;
-	}
 	
 	public void setId(int id) {
 		this.id = id;
@@ -67,9 +63,5 @@ public class UserModel {
 			return login;
 		}
 		return name + ' ' + surname;
-	}
-
-	public boolean createUser() {
-		return dao.createUser(this);
 	}
 }

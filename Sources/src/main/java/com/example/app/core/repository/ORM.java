@@ -3,6 +3,7 @@ package com.example.app.core.repository;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.app.core.repository.DataMap.Field;
 import com.example.app.homepage.UserModel;
 
 public enum ORM {
@@ -23,10 +24,10 @@ public enum ORM {
 		return new DataMap()
 			.setModelClass(UserModel.class)
 			.setTableName("users")
-			.addFieldColumnMap("id", "id")
-			.addFieldColumnMap("login", "login")
-			.addFieldColumnMap("password", "password")
-			.addFieldColumnMap("name", "name")
-			.addFieldColumnMap("surname", "surname");
+			.addFieldColumnMap(int.class, "id", "id")
+			.addFieldColumnMap(String.class, "login", "login")
+			.addFieldColumnMap(String.class, "password", "password")
+			.addFieldColumnMap(String.class, "name", "name")
+			.addFieldColumnMap(String.class, "surname", "surname");
 	}
 }

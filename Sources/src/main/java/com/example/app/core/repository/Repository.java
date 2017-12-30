@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import com.example.app.core.repository.DataMap.Field;
 import com.example.app.core.repository.QueryObject.QueryObjectBuilder;
 
 public class Repository {
@@ -38,10 +39,12 @@ public class Repository {
 				T domainModel = (T) queryObject.getModelClass().newInstance();
 				
 				for (String column : dataMap.getColumns()) {
-					Object columnValue = resultSet.getObject(dataMap.column2Setter(column));
-					String setterName = dataMap.column2Setter(column);
-					Method setter = domainModel.getClass().getMethod(setterName);
-					setter.invoke(columnValue);
+					Object columnValue = resultSet.getObject(dataMap.column2Field(column).label);
+					Field field = dataMap.column2Field(column);
+					String fieldName = field.label;
+					String setterName = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+					Method setter = domainModel.getClass().getMethod(setterName, field.type);
+					setter.invoke(domainModel, columnValue);
 				}
 				result.add(domainModel);
 			}
@@ -74,7 +77,7 @@ public class Repository {
 				.map(qo -> qo.toSql(dataMap)).collect(Collectors.toList());
 		
 		stringBuilder.append(String.join(" and ", sqlConditions));
-		stringBuilder.append(";");
+		stringBuilder.append(" ;");
 		return stringBuilder.toString();
 	}
 }

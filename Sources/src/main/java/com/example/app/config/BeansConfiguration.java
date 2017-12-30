@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.app.core.repository.Dao;
+import com.example.app.core.repository.Repository;
 
 @Configuration
 public class BeansConfiguration {
@@ -15,5 +16,11 @@ public class BeansConfiguration {
 	@Autowired
 	Dao getDato(DataSource dataSource) {
 		return new Dao(dataSource);
+	}
+	
+	@Bean
+	@Autowired
+	Repository getRepository(DataSource dataSource) {
+		return new Repository(dataSource);
 	}
 }

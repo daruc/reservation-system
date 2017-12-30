@@ -8,8 +8,8 @@ public class DataMap {
 	
 	protected Class<?> modelClass;
 	protected String tableName;
-	protected Map<String, String> getterColumnMap = new HashMap<>();
-	protected Map<String, String> columnSetterMap = new HashMap<>();
+	protected Map<String, String> fieldColumnMap = new HashMap<>();
+	protected Map<String, Field> columnFieldMap = new HashMap<>();
 	
 	public DataMap setModelClass(Class<?> modelClass) {
 		this.modelClass = modelClass;
@@ -29,21 +29,31 @@ public class DataMap {
 		return tableName;
 	}
 	
-	public String column2Setter(String columnName) {
-		return null;
+	public Field column2Field(String columnName) {
+		return columnFieldMap.get(columnName);
 	}
 	
-	public String getter2Column(String getterName) {
-		return null;
+	public String field2Column(String fieldName) {
+		return fieldColumnMap.get(fieldName);
 	}
 	
-	public DataMap addFieldColumnMap(String fieldName, String columnName) {
-		getterColumnMap.put("get" + fieldName, columnName);
-		columnSetterMap.put(columnName, "set"+fieldName);
+	public DataMap addFieldColumnMap(Class fieldType, String fieldName, String columnName) {
+		fieldColumnMap.put(fieldName, columnName);
+		columnFieldMap.put(columnName, new Field(fieldName, fieldType));
 		return this;
 	}
 	
 	public Set<String> getColumns() {
-		return columnSetterMap.keySet();
+		return columnFieldMap.keySet();
+	}
+	
+	public static class Field {
+		public final String label;
+		public final Class<?> type;
+		
+		public Field(String label, Class<?> type) {
+			this.label = label;
+			this.type = type;
+		}
 	}
 }

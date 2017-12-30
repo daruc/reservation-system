@@ -19,7 +19,7 @@ import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
 public class Dao {
-	private DataSource dataSource;	// deprecated
+	private DataSource dataSource;
 	private Repository repository;
 
 	@Autowired
@@ -69,25 +69,15 @@ public class Dao {
 	}
 
 	public UserModel getUser(String login) {
-		String sql = new StringBuilder()
-				.append("select id, password, name, surname from users where login = '")
-				.append(login)
-				.append("';")
-				.toString();
-		try (Connection con = dataSource.getConnection()){
-			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
-			resultSet.next();
-			UserModel user = new UserModel(this);
-			user.setLogin(login);
-			user.setPassword(resultSet.getString("password"));
-			user.setName(resultSet.getString("name"));
-			user.setSurname(resultSet.getString("surname"));
-			user.setId(resultSet.getInt("id"));
-			return user;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (login == null) {
+			return null;
 		}
-		return null;
+		
+		QueryObject<UserModel> queryObject = repository.queryObjectBuilder(new UserModel())
+			.addCriteria("login", Criteria.SqlOperator.EQUAL, login)
+			.build();
+		
+		return queryObject.execute().get(0);
 	}
 	
 	public boolean createUsersGroup(UsersGroupModel usersGroup) {
@@ -152,7 +142,7 @@ public class Dao {
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
-				UserModel user = new UserModel(this);
+				UserModel user = new UserModel();
 				user.setId(resultSet.getInt("id"));
 				user.setLogin(resultSet.getString("login"));
 				user.setName(resultSet.getString("name"));
@@ -174,7 +164,7 @@ public class Dao {
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
-				UserModel user = new UserModel(this);
+				UserModel user = new UserModel();
 				user.setId(resultSet.getInt("id"));
 				user.setLogin(resultSet.getString("login"));
 				user.setName(resultSet.getString("name"));
