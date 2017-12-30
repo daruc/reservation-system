@@ -73,7 +73,7 @@ public class Dao {
 			return null;
 		}
 		
-		QueryObject<UserModel> queryObject = repository.queryObjectBuilder(new UserModel())
+		QueryObject<UserModel> queryObject = repository.queryObjectBuilder(UserModel.class)
 			.addCriteria("login", Criteria.SqlOperator.EQUAL, login)
 			.build();
 		
@@ -103,7 +103,7 @@ public class Dao {
 		try (Connection con = dataSource.getConnection()){
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
-				UsersGroupModel usersGroup = new UsersGroupModel(this);
+				UsersGroupModel usersGroup = new UsersGroupModel();
 				usersGroup.setId(resultSet.getInt("id"));
 				usersGroup.setName(resultSet.getString("name"));
 				usersGroup.setDescription(resultSet.getString("description"));
@@ -116,7 +116,7 @@ public class Dao {
 	}
 	
 	public UsersGroupModel getUserGroup(int id) {
-		String sql = new StringBuilder("select name, description from groups where id = ")
+		/*String sql = new StringBuilder("select name, description from groups where id = ")
 				.append(Integer.toString(id))
 				.append(" ;")
 				.toString();
@@ -132,7 +132,12 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return usersGroup;
+		return usersGroup;*/
+		
+		QueryObject<UsersGroupModel> queryObject = repository.queryObjectBuilder(UsersGroupModel.class)
+				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
+				.build();
+		return queryObject.execute().get(0);
 	}
 	
 	public List<UserModel> getAllUsersWithoutGroup() {

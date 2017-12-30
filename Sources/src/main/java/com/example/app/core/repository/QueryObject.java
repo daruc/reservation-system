@@ -8,12 +8,12 @@ import com.example.app.core.repository.Criteria.SqlOperator;
 
 public class QueryObject<T> {
 	private Repository repository;
-	protected T domainModel;
+	protected Class<T> domainClass;
 	protected List<Criteria> criteria;
 	
 	private QueryObject(QueryObjectBuilder<T> builder) {
 		this.repository = builder.getRepository();
-		this.domainModel = builder.getDomainModel();
+		this.domainClass = builder.getDomainClass();
 		this.criteria = builder.getCriteria();
 	}
 	
@@ -22,26 +22,26 @@ public class QueryObject<T> {
 	}
 	
 	public Class<?> getModelClass() {
-		return domainModel.getClass();
+		return domainClass;
 	}
 	
 	public List<Criteria> getCriteria() {
 		return criteria;
 	}
 	
-	public static <T> QueryObjectBuilder<T> builder(Repository repository, T domainModel) {
-		return new QueryObjectBuilder<T>(repository, domainModel);
+	public static <T> QueryObjectBuilder<T> builder(Repository repository, Class<T> domainClass) {
+		return new QueryObjectBuilder<T>(repository, domainClass);
 	}
 	
 	
 	public static class QueryObjectBuilder<T> {
 		protected Repository repository;
-		protected T domainModel;
+		protected Class<T> domainClass;
 		protected List<Criteria> criteria = new ArrayList<>();
 		
-		public QueryObjectBuilder(Repository repository, T domainModel) {
+		public QueryObjectBuilder(Repository repository, Class<T> domainModel) {
 			this.repository = repository;
-			this.domainModel = domainModel;
+			this.domainClass = domainModel;
 		}
 		
 		public QueryObject<T> build() {
@@ -52,8 +52,8 @@ public class QueryObject<T> {
 			return repository;
 		}
 		
-		public T getDomainModel() {
-			return domainModel;
+		public Class<T> getDomainClass() {
+			return domainClass;
 		}
 		
 		public QueryObjectBuilder<T> addCriteria(Criteria criteria) {

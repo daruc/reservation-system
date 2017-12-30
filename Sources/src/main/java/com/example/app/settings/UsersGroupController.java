@@ -24,7 +24,7 @@ public class UsersGroupController {
 	
 	@ModelAttribute
 	public UsersGroupModel getUsersGroupModel() {
-		return new UsersGroupModel(dao);
+		return new UsersGroupModel();
 	}
 	
 	@Autowired
@@ -43,14 +43,14 @@ public class UsersGroupController {
 		navigation.addBreadcrumb("/settings/create_users_group", "Create Users Group");
 		navigation.update();
 		
-		model.addAttribute("form_model", new UsersGroupModel(dao));
+		model.addAttribute("form_model", new UsersGroupModel());
 		
 		return "/settings/create_users_group";
 	}
 	
 	@PostMapping("users_group")
 	public String createUsersGroup(@ModelAttribute UsersGroupModel model) {
-		model.create();
+		dao.createUsersGroup(model);
 		return "redirect:/settings";
 	}
 	

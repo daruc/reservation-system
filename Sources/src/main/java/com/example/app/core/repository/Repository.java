@@ -23,8 +23,8 @@ public class Repository {
 		this.dataSource = dataSource;
 	}
 	
-	public <T> QueryObjectBuilder<T> queryObjectBuilder(T domainModel) {
-		return QueryObject.builder(this, domainModel);
+	public <T> QueryObjectBuilder<T> queryObjectBuilder(Class<T> modelClass) {
+		return QueryObject.builder(this, modelClass);
 	}
 
 	public <T> List<T> execute(QueryObject<T> queryObject) {
