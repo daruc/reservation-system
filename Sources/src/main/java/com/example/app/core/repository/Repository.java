@@ -70,13 +70,18 @@ public class Repository {
 		DataMap dataMap = orm.get(queryObject.getModelClass());
 		StringBuilder stringBuilder =  new StringBuilder()
 				.append("select * from ")
-				.append(dataMap.getTableName())
-				.append(" where ");
+				.append(dataMap.getTableName());
 		
-		List<String> sqlConditions = queryObject.getCriteria().stream()
-				.map(qo -> qo.toSql(dataMap)).collect(Collectors.toList());
+		List<Criteria> criteria = queryObject.getCriteria();
+		if (!criteria.isEmpty()) {
+			stringBuilder.append(" where ");
 		
-		stringBuilder.append(String.join(" and ", sqlConditions));
+			List<String> sqlConditions = criteria.stream()
+					.map(qo -> qo.toSql(dataMap)).collect(Collectors.toList());
+			
+			stringBuilder.append(String.join(" and ", sqlConditions)); 
+		}
+		
 		stringBuilder.append(" ;");
 		return stringBuilder.toString();
 	}

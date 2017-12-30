@@ -98,41 +98,12 @@ public class Dao {
 	}
 	
 	public List<UsersGroupModel> getAllUsersGroups() {
-		String sql = "select id, name, description from groups;";
-		List<UsersGroupModel> usersGroupsList = new ArrayList<>();
-		try (Connection con = dataSource.getConnection()){
-			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
-			while (resultSet.next()) {
-				UsersGroupModel usersGroup = new UsersGroupModel();
-				usersGroup.setId(resultSet.getInt("id"));
-				usersGroup.setName(resultSet.getString("name"));
-				usersGroup.setDescription(resultSet.getString("description"));
-				usersGroupsList.add(usersGroup);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return usersGroupsList;
+		QueryObject<UsersGroupModel> queryObject = repository.queryObjectBuilder(UsersGroupModel.class)
+				.build();
+		return queryObject.execute();
 	}
 	
 	public UsersGroupModel getUserGroup(int id) {
-		/*String sql = new StringBuilder("select name, description from groups where id = ")
-				.append(Integer.toString(id))
-				.append(" ;")
-				.toString();
-		
-		UsersGroupModel usersGroup = null;
-		try (Connection con = dataSource.getConnection()) {
-			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
-			resultSet.next();
-			usersGroup = new UsersGroupModel(this);
-			usersGroup.setId(id);
-			usersGroup.setName(resultSet.getString("name"));
-			usersGroup.setDescription(resultSet.getString("description"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return usersGroup;*/
 		
 		QueryObject<UsersGroupModel> queryObject = repository.queryObjectBuilder(UsersGroupModel.class)
 				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
