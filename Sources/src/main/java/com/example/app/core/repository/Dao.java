@@ -193,7 +193,7 @@ public class Dao {
 	}
 	
 	public List<ResourceModel> getAllResources() {
-		List<ResourceModel> resources = new ArrayList<>();
+		/*List<ResourceModel> resources = new ArrayList<>();
 		String sql = "select id, name, description from resource_groups;";
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
@@ -207,10 +207,15 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return resources;
+		return resources;*/
+		
+		QueryObject<ResourceModel> queryObject = repository.queryObjectBuilder(ResourceModel.class)
+				.build();
+		return queryObject.execute();
 	}
 	
 	public ResourceModel getResource(int id) {
+		/*
 		String sql = new StringBuilder("select name, description from resource_groups where id=")
 				.append(id)
 				.append(";")
@@ -226,7 +231,13 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return null;*/
+		
+		QueryObject<ResourceModel> queryObject = repository.queryObjectBuilder(ResourceModel.class)
+				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
+				.build();
+		
+		return queryObject.execute().get(0);
 	}
 	
 	public boolean createReservation(ReservationModel reservation) {

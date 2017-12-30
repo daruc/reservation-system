@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.app.homepage.UserModel;
+import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
 public enum ORM {
@@ -14,6 +15,7 @@ public enum ORM {
 	ORM() {
 		map.put(UserModel.class, usersMap());
 		map.put(UsersGroupModel.class, groupsMap());
+		map.put(ResourceModel.class, resourcesMap());
 	}
 	
 	public DataMap get(Class<?> domainModel) {
@@ -32,12 +34,21 @@ public enum ORM {
 			.addFieldColumnMap(String.class, "surname", "surname");
 	}
 	
-	public DataMap groupsMap() {
+	private DataMap groupsMap() {
 		return new DataMap()
 			.setModelClass(UsersGroupModel.class)
 			.setTableName("groups")
 			.addFieldColumnMap(int.class, "id", "id")
 			.addFieldColumnMap(String.class, "name", "name")
 			.addFieldColumnMap(String.class, "description", "description");
+	}
+	
+	private DataMap resourcesMap() {
+		return new DataMap()
+				.setModelClass(ResourceModel.class)
+				.setTableName("resource_groups")
+				.addFieldColumnMap(int.class, "id", "id")
+				.addFieldColumnMap(String.class, "name", "name")
+				.addFieldColumnMap(String.class, "description", "description");
 	}
 }
