@@ -1,4 +1,4 @@
-package com.example.app.core;
+package com.example.app.core.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,11 +19,13 @@ import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
 public class Dao {
-	private DataSource dataSource;
+	private DataSource dataSource;	// deprecated
+	private Repository repository;
 
 	@Autowired
 	public Dao(DataSource dataSource) {
 		this.dataSource = dataSource;
+		repository = new Repository(dataSource);
 	}
 	
 	public boolean createUser(UserModel userFormModel) {

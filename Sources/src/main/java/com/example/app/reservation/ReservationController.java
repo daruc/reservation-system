@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.app.core.Dao;
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.repository.Dao;
 import com.example.app.homepage.UserModel;
 import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;

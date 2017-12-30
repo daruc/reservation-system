@@ -1,6 +1,6 @@
 package com.example.app.settings;
 
-import com.example.app.core.Dao;
+import com.example.app.core.repository.Dao;
 
 public class UsersGroupModel {
 	

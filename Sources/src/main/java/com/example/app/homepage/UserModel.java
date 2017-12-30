@@ -2,7 +2,7 @@ package com.example.app.homepage;
 
 import java.util.Optional;
 
-import com.example.app.core.Dao;
+import com.example.app.core.repository.Dao;
 
 public class UserModel {
 	private Dao dao;

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.app.core.Dao;
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.repository.Dao;
 
 @Controller
 public class SettingsController {

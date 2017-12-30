@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
+import com.example.app.core.repository.Dao;
 import com.example.app.homepage.LoginModel;
 import com.example.app.homepage.UserModel;
 

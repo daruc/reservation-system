@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.app.core.Dao;
 import com.example.app.core.Link;
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.repository.Dao;
 
 @Controller
 public class HomepageController {

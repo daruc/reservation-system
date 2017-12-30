@@ -1,6 +1,6 @@
 package com.example.app.homepage;
 
-import com.example.app.core.Dao;
+import com.example.app.core.repository.Dao;
 
 public class LoginModel {
 	

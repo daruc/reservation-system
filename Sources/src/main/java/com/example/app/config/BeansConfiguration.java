@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.app.core.Dao;
+import com.example.app.core.repository.Dao;
 
 @Configuration
 public class BeansConfiguration {

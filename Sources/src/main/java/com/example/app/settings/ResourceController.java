@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.app.core.Dao;
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.repository.Dao;
 
 @Controller
 public class ResourceController {
