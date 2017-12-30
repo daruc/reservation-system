@@ -5,6 +5,7 @@ public class AvailableReservationModel {
 	private int id;
 	private String label;
 	private int reservationId;
+	private int userId;
 	
 	private Boolean checked = Boolean.FALSE;
 
@@ -38,5 +39,13 @@ public class AvailableReservationModel {
 
 	public void setChecked(Boolean checked) {
 		this.checked = checked;
+	}
+	
+	public void setUserId(int id) {
+		userId = id;
+	}
+	
+	public int getUserId() {
+		return userId;
 	}
 }

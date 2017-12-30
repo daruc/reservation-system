@@ -193,46 +193,12 @@ public class Dao {
 	}
 	
 	public List<ResourceModel> getAllResources() {
-		/*List<ResourceModel> resources = new ArrayList<>();
-		String sql = "select id, name, description from resource_groups;";
-		try (Connection con = dataSource.getConnection()) {
-			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
-			while (resultSet.next()) {
-				ResourceModel resource = new ResourceModel();
-				resource.setId(resultSet.getInt("id"));
-				resource.setName(resultSet.getString("name"));
-				resource.setDescription(resultSet.getString("description"));
-				resources.add(resource);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return resources;*/
-		
 		QueryObject<ResourceModel> queryObject = repository.queryObjectBuilder(ResourceModel.class)
 				.build();
 		return queryObject.execute();
 	}
 	
 	public ResourceModel getResource(int id) {
-		/*
-		String sql = new StringBuilder("select name, description from resource_groups where id=")
-				.append(id)
-				.append(";")
-				.toString();
-
-		try (Connection con = dataSource.getConnection()) {
-			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
-			resultSet.next();
-			ResourceModel resource = new ResourceModel();
-			resource.setName(resultSet.getString("name"));
-			resource.setDescription(resultSet.getString("description"));
-			return resource;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;*/
-		
 		QueryObject<ResourceModel> queryObject = repository.queryObjectBuilder(ResourceModel.class)
 				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
 				.build();
@@ -307,42 +273,21 @@ public class Dao {
 	}
 	
 	public ReservationModel getReservation(int reservationId) {
-		String sql = "select name, description from reservations where id = ?";
-		ReservationModel reservation = null;
-		try (Connection con = dataSource.getConnection()) {
-			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, reservationId);
-			ResultSet resultSet = stm.executeQuery();
-			resultSet.next();
-			reservation = new ReservationModel();
-			reservation.setId(reservationId);
-			reservation.setName(resultSet.getString("name"));
-			reservation.setDescription(resultSet.getString("description"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return reservation;
+		QueryObject<ReservationModel> queryObject = repository.queryObjectBuilder(ReservationModel.class)
+				.addCriteria("id", Criteria.SqlOperator.EQUAL, reservationId)
+				.build();
+		
+		return queryObject.execute().get(0);
 	}
 	
 	public List<AvailableReservationModel> getAvailableReservations(int reservationId) {
-		String sql = "select id, label from made_reservations"
-				+ " where user_id is null and reservation_id = ?";
-		List<AvailableReservationModel> availableReservations = new ArrayList<>();
-		try (Connection con = dataSource.getConnection()) {
-			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, reservationId);
-			ResultSet resultSet = stm.executeQuery();
-			while (resultSet.next()) {
-				AvailableReservationModel availableReservation = new AvailableReservationModel();
-				availableReservation.setId(resultSet.getInt("id"));
-				availableReservation.setReservationId(reservationId);
-				availableReservation.setLabel(resultSet.getString("label"));
-				availableReservations.add(availableReservation);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return availableReservations;
+
+		QueryObject<AvailableReservationModel> queryObject =
+				repository.queryObjectBuilder(AvailableReservationModel.class)
+				.addCriteria("reservationId", Criteria.SqlOperator.EQUAL, reservationId)
+				.build();
+		
+		return queryObject.execute();
 	}
 	
 	public boolean makeReservation(int userId, int availableReservationId) {

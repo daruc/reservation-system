@@ -39,7 +39,10 @@ public class Repository {
 				T domainModel = (T) queryObject.getModelClass().newInstance();
 				
 				for (String column : dataMap.getColumns()) {
-					Object columnValue = resultSet.getObject(dataMap.column2Field(column).label);
+					Object columnValue = resultSet.getObject(column);
+					if (columnValue == null) {
+						continue;
+					}
 					Field field = dataMap.column2Field(column);
 					String fieldName = field.label;
 					String setterName = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);

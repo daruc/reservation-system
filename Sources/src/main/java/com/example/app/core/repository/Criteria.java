@@ -8,7 +8,7 @@ public class Criteria {
 	  public Criteria(String field, SqlOperator operator, Object value) {
 		  this.field = field;
 		  this.operator = operator;
-		  this.value = "'" + value + "'";
+		  this.value = value;
 	  }
 	  
 	  public static enum SqlOperator {
@@ -27,6 +27,16 @@ public class Criteria {
 	  }
 	  
 	  public String toSql(DataMap dataMap) {
-		  return "(" + dataMap.field2Column(field) + " " + operator + " " + value.toString() + ")";
+		  
+		  Class<?> fieldType = dataMap.getFieldType(field);
+		  
+		  if (fieldType.equals(String.class)) {
+			  return "(" + dataMap.field2Column(field) + " " + operator + " "
+					  + "'" + value.toString() + "'" + ")";
+		  } else if (fieldType.equals(int.class)) {
+			  return "(" + dataMap.field2Column(field) + " " + operator + " " + value.toString() + ")";
+		  } 
+		  
+		  return null;
 	  }
 }

@@ -47,6 +47,14 @@ public class DataMap {
 		return columnFieldMap.keySet();
 	}
 	
+	public Class<?> getFieldType(String fieldName) {
+		Field field = columnFieldMap.values().stream()
+				.filter(columnField -> columnField.label.equals(fieldName))
+				.findAny()
+				.orElseThrow(() -> new IllegalArgumentException("Cannot find field " + "fieldName + in the Data Map."));
+		return field.type;
+	}
+	
 	public static class Field {
 		public final String label;
 		public final Class<?> type;
