@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.repository.Dao;
+import com.example.app.homepage.UserModel;
 
 @Controller
 public class MakeReservationController {
@@ -35,7 +36,7 @@ public class MakeReservationController {
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
 		navigation.addBreadcrumb("/", "Home");
 		navigation.addBreadcrumb("/list", "Reservations list");
-		navigation.addBreadcrumb("/make_reservation", "Make reservation");
+		navigation.addBreadcrumb("/make_reservation?id=" + id, "Make reservation");
 		navigation.update();
 		
 		ReservationModel reservation = dao.getReservation(id);
@@ -43,6 +44,12 @@ public class MakeReservationController {
 		
 		List<AvailableReservationModel> availableReservations = dao.getAvailableReservations(id);
 		model.addAttribute("av_reservations", availableReservations);
+		
+		String login = (String) httpSession.getAttribute("login");
+		UserModel user = dao.getUser(login);
+		
+		List<AvailableReservationModel> madeReservations = dao.getMadeReservations(id, user.getId());
+		model.addAttribute("made_reservations", madeReservations);
 		
 		return "/reservation/make_reservation";
 	}
@@ -53,7 +60,18 @@ public class MakeReservationController {
 		String login = (String) httpSession.getAttribute("login");
 		int userId = dao.getUser(login).getId();
 		dao.makeReservation(userId, availableReservationId);
-		return "redirect:/list";
+		
+		AvailableReservationModel availableReservation = dao.getMadeReservation(availableReservationId);
+		return "redirect:/make_reservation?id=" + availableReservation.getReservationId();
+	}
+	
+	@GetMapping("/cancel_reservation")
+	public String cancelReservations(@RequestParam(name="id", required=true) int availableReservationId,
+			Model model) {
+			
+		dao.cancelReservation(availableReservationId);
+		AvailableReservationModel availableReservation = dao.getMadeReservation(availableReservationId);
+		return "redirect:/make_reservation?id=" + availableReservation.getReservationId();
 	}
 
 }

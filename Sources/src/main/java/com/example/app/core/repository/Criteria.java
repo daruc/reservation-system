@@ -12,7 +12,8 @@ public class Criteria {
 	  }
 	  
 	  public static enum SqlOperator {
-		  EQUAL("=");
+		  EQUAL("="),
+		  IS("is");
 		  
 		  private String strOperator;
 		  
@@ -30,12 +31,14 @@ public class Criteria {
 		  
 		  Class<?> fieldType = dataMap.getFieldType(field);
 		  
-		  if (fieldType.equals(String.class)) {
+		  if (value == null) {
+			  return "(" + dataMap.field2Column(field) + " " + operator + " null)";
+		  } else if (fieldType.equals(String.class)) {
 			  return "(" + dataMap.field2Column(field) + " " + operator + " "
 					  + "'" + value.toString() + "'" + ")";
 		  } else if (fieldType.equals(int.class)) {
 			  return "(" + dataMap.field2Column(field) + " " + operator + " " + value.toString() + ")";
-		  } 
+		  }
 		  
 		  return null;
 	  }

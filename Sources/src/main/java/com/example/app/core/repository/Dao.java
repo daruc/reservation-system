@@ -285,6 +285,7 @@ public class Dao {
 		QueryObject<AvailableReservationModel> queryObject =
 				repository.queryObjectBuilder(AvailableReservationModel.class)
 				.addCriteria("reservationId", Criteria.SqlOperator.EQUAL, reservationId)
+				.addCriteria("userId", Criteria.SqlOperator.IS, null)
 				.build();
 		
 		return queryObject.execute();
@@ -302,6 +303,41 @@ public class Dao {
 			result = false;
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	public List<AvailableReservationModel> getMadeReservations(int reservationId, int userId) {
+		
+		QueryObject<AvailableReservationModel> queryObject =
+				repository.queryObjectBuilder(AvailableReservationModel.class)
+				.addCriteria("reservationId", Criteria.SqlOperator.EQUAL, reservationId)
+				.addCriteria("userId", Criteria.SqlOperator.EQUAL, userId)
+				.build();
+		
+		return queryObject.execute();
+	}
+	
+	public AvailableReservationModel getMadeReservation(int availableReservationId) {
+		
+		QueryObject<AvailableReservationModel> queryObject = 
+				repository.queryObjectBuilder(AvailableReservationModel.class)
+				.addCriteria("id", Criteria.SqlOperator.EQUAL, availableReservationId)
+				.build();
+		
+		return queryObject.execute().get(0);
+	}
+	
+	public boolean cancelReservation(int availableReservationId) {
+		boolean result = true;
+		String sql = "update made_reservations set user_id = null where id = "
+				+ availableReservationId + ";";
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 }

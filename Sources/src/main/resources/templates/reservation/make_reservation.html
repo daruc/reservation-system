@@ -25,6 +25,16 @@
 			</div>
 			
 			<div class="divider"></div>
+			<h5>Made reservations</h5>
+			<h6>Choose to cancel</h6>
+			<div class="collection">
+				<a th:each="made_reservation : ${made_reservations}"
+					th:text="${made_reservation.getLabel()}"
+					class="collection-item"
+					th:href="${'/cancel_reservation?id=' + made_reservation.getId()}"></a>
+			</div>
+			
+			<div class="divider"></div>
 			<h5>Available reservations</h5>
 			<div class="collection">
 				<a th:each="av_reservation : ${av_reservations}"
