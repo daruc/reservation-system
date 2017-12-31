@@ -80,6 +80,33 @@ public class Dao {
 		return queryObject.execute().get(0);
 	}
 	
+	public UserModel getUser(int id) {
+		QueryObject<UserModel> queryObject = repository.queryObjectBuilder(UserModel.class)
+				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
+				.build();
+		
+		return queryObject.execute().get(0);
+	}
+	
+	public List<UserModel> getAllUsers() {
+		QueryObject<UserModel> queryObject = repository.queryObjectBuilder(UserModel.class)
+				.build();
+		
+		return queryObject.execute();
+	}
+	
+	public boolean deleteUser(int userId) {
+		boolean result = true;
+		String sql = "delete from users where id = " + userId + ";";
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public boolean createUsersGroup(UsersGroupModel usersGroup) {
 		String sql = new StringBuilder()
 				.append("insert into groups(name, description) values('")
@@ -90,7 +117,7 @@ public class Dao {
 				.toString();
 		
 		try {
-			return dataSource.getConnection().prepareStatement(sql).execute();
+			return dataSource.getConnection().prepareStatement(sql).execute();	// TODO
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
