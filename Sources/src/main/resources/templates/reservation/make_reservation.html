@@ -25,6 +25,11 @@
 			</div>
 			
 			<div class="divider"></div>
+			<h5>Actions</h5>
+			<a class="waves-effect waves-light btn"
+				th:href="${'/delete_reservation?id=' + reservation.getId()}">Delete</a>
+			
+			<div class="divider"></div>
 			<h5>Made reservations</h5>
 			<h6>Choose to cancel</h6>
 			<div class="collection">
@@ -43,6 +48,7 @@
 					th:href="${'/reserve?id=' + av_reservation.getId()}"
 					></a>
 			</div>
+			
 		</div>
 	</div>
 

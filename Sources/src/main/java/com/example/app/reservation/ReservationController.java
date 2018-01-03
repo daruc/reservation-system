@@ -119,4 +119,11 @@ public class ReservationController {
 		
 		return "redirect:/list";
 	}
+	
+	@GetMapping("/delete_reservation")
+	public String deleteReservation(@RequestParam(name="id", required=true) int reservationId) {
+		
+		dao.deleteReservation(reservationId);
+		return "redirect:/list";
+	}
 }

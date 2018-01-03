@@ -415,4 +415,23 @@ public class Dao {
 		
 		return result;
 	}
+	
+	public boolean deleteReservation(int reservationId) {
+		boolean result = true;
+		String sql1 = "delete from made_reservations where reservation_id = " + reservationId + ";";
+		String sql2 = "delete from reservations where id = " + reservationId + ";";
+		
+		logger.info(sql1);
+		logger.info(sql2);
+		
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql1).execute();
+			con.prepareStatement(sql2).execute();
+		} catch (SQLException e) {
+			result = false;
+			logger.error("Cannot delete reservation with ID " + reservationId + ".", e);
+		}
+		
+		return result;
+	}
 }
