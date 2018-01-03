@@ -11,13 +11,18 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.app.core.repository.DataMap.Field;
 import com.example.app.core.repository.QueryObject.QueryObjectBuilder;
 
 public class Repository {
 	
+	private static final Logger logger = LoggerFactory.getLogger(Repository.class);
+	
 	private DataSource dataSource;
-	private ORM orm = ORM.INSTANCE;
+	private Orm orm = Orm.INSTANCE;
 	
 	public Repository(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -32,6 +37,7 @@ public class Repository {
 		String sql = buildSql(queryObject);
 		DataMap dataMap = orm.get(queryObject.getModelClass());
 		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
@@ -52,19 +58,10 @@ public class Repository {
 				result.add(domainModel);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			logger.error("Database error.", e);
+		} catch (InvocationTargetException | IllegalArgumentException | SecurityException
+				| NoSuchMethodException| InstantiationException | IllegalAccessException e) {
+			logger.error("Reflection error.", e);
 		}
 		return result;
 	}

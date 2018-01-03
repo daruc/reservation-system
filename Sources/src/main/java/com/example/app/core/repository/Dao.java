@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.app.homepage.LoginModel;
@@ -19,6 +21,9 @@ import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
 public class Dao {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Dao.class);
+	
 	private DataSource dataSource;
 	private Repository repository;
 
@@ -41,10 +46,12 @@ public class Dao {
 				.append("', 0);")
 				.toString();
 		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
+			
 			return con.prepareStatement(sql).execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot create a new user.", e);
 			return false;
 		}
 	}
@@ -57,13 +64,15 @@ public class Dao {
 				.append(loginModel.getPassword())
 				.append("';")
 				.toString();
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			resultSet.next();
 			int count = resultSet.getInt(1);
 			return count == 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot check the user with login " + loginModel.getLogin() + ".", e);
 		}
 		return false;
 	}
@@ -77,7 +86,12 @@ public class Dao {
 			.addCriteria("login", Criteria.SqlOperator.EQUAL, login)
 			.build();
 		
-		return queryObject.execute().get(0);
+		try {
+			return queryObject.execute().get(0);
+		} catch (IndexOutOfBoundsException e) {
+			logger.error("Cannot retrieve user with login " + login + " from database.", e);
+			return null;
+		}
 	}
 	
 	public UserModel getUser(int id) {
@@ -85,7 +99,13 @@ public class Dao {
 				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
 				.build();
 		
-		return queryObject.execute().get(0);
+		try {
+			return queryObject.execute().get(0);
+		} catch (IndexOutOfBoundsException e) {
+			logger.error("Cannot retrieve user with ID " + id + " from database.", e);
+			return null;
+		}
+		
 	}
 	
 	public List<UserModel> getAllUsers() {
@@ -98,11 +118,13 @@ public class Dao {
 	public boolean deleteUser(int userId) {
 		boolean result = true;
 		String sql = "delete from users where id = " + userId + ";";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			con.prepareStatement(sql).execute();
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot delete user with ID " + userId + " from database.", e);
 		}
 		return result;
 	}
@@ -116,10 +138,11 @@ public class Dao {
 				.append("');")
 				.toString();
 		
+		logger.info(sql);
 		try {
-			return dataSource.getConnection().prepareStatement(sql).execute();	// TODO
+			return dataSource.getConnection().prepareStatement(sql).execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot create a new Users Group.", e);
 			return false;
 		}
 	}
@@ -135,13 +158,21 @@ public class Dao {
 		QueryObject<UsersGroupModel> queryObject = repository.queryObjectBuilder(UsersGroupModel.class)
 				.addCriteria("id", Criteria.SqlOperator.EQUAL, id)
 				.build();
-		return queryObject.execute().get(0);
+		
+		try {
+			return queryObject.execute().get(0);
+		} catch (IndexOutOfBoundsException e) {
+			logger.error("Cannot retrieve Users Group with ID " + id + " from database.", e);
+			return null;
+		}
 	}
 	
 	public List<UserModel> getAllUsersWithoutGroup() {
 		List<UserModel> usersList = new ArrayList<>();
 		String sql = "select id, login, password, name, surname from users"
 				+ " where id not in (select distinct user_id from user_group)";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
@@ -154,7 +185,7 @@ public class Dao {
 				usersList.add(user);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot retrieve all users without group from database.", e);
 		}
 		return usersList;
 	}
@@ -164,6 +195,8 @@ public class Dao {
 		String sql = "select u.id, u.login, u.password, u.name, u.surname"
 				+ " from users as u inner join user_group as ug on u.id = ug.user_id"
 				+ " where ug.group_id = " + groupId + ";";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
 			while (resultSet.next()) {
@@ -176,7 +209,7 @@ public class Dao {
 				usersList.add(user);
 			}
 		} catch(SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot retrieve users with Group ID " + groupId + " from database.", e);
 		}
 		return usersList;
 	}
@@ -192,11 +225,13 @@ public class Dao {
 					.append(groupId)
 					.append(");")
 					.toString();
+				
+				logger.info(sql);
 				con.prepareStatement(sql).execute();
 			}
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot add users to group with ID " + groupId + ".", e);
 		}
 		return result;
 	}
@@ -210,11 +245,12 @@ public class Dao {
 				.append("');")
 				.toString();
 		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			con.prepareStatement(sql).execute();
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot create Resource " + resource.getName() + ".", e);
 		}
 		return result;
 	}
@@ -248,7 +284,11 @@ public class Dao {
 				.append(reservation.getResourceId())
 				.append(");")
 				.toString();
+		
 		String sqlId = "select currval(pg_get_serial_sequence('reservations', 'id'));";
+		
+		logger.info(sql);
+		logger.info(sqlId);
 		try (Connection con = dataSource.getConnection()) {
 			con.prepareStatement(sql).execute();
 			ResultSet resultSet = con.prepareStatement(sqlId).executeQuery();
@@ -256,7 +296,7 @@ public class Dao {
 			reservation.setId(resultSet.getInt(1));
 		} catch(SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot create reservation " + reservation.getName() + ".", e);
 		}
 		return result;
 	}
@@ -265,6 +305,8 @@ public class Dao {
 		boolean result = true;
 		String sql = "insert into made_reservations(label, reservation_id)"
 				+ " values(?, ?);";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setString(1, reservation.getLabel());
@@ -272,7 +314,7 @@ public class Dao {
 			stm.execute();
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot create Available Reservation " + reservation.getLabel() + ".", e);
 		}
 		return result;
 	}
@@ -283,6 +325,7 @@ public class Dao {
 				+ " from reservations as r inner join user_group as ug on r.group_id = ug.group_id"
 				+ " where ug.user_id = ?;";
 		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, userId);
@@ -294,7 +337,7 @@ public class Dao {
 				reservations.add(reservation);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Cannot retrieve reservations for user with ID " + userId + " from database.", e);
 		}
 		return reservations;
 	}
@@ -321,6 +364,8 @@ public class Dao {
 	public boolean makeReservation(int userId, int availableReservationId) {
 		boolean result = true;
 		String sql = "update made_reservations set user_id = ? where id = ?;";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, userId);
@@ -328,7 +373,8 @@ public class Dao {
 			stm.execute();
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("User " + userId + " cannot reserve Available Reservation "
+					+ availableReservationId + ".", e);
 		}
 		return result;
 	}
@@ -358,11 +404,13 @@ public class Dao {
 		boolean result = true;
 		String sql = "update made_reservations set user_id = null where id = "
 				+ availableReservationId + ";";
+		
+		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
 			con.prepareStatement(sql).execute();
 		} catch (SQLException e) {
 			result = false;
-			e.printStackTrace();
+			logger.error("Cannot cancel Available Reservation with ID " + availableReservationId + ".", e);
 		}
 		
 		return result;

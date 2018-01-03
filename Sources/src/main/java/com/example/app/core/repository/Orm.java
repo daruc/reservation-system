@@ -9,12 +9,12 @@ import com.example.app.reservation.ReservationModel;
 import com.example.app.settings.ResourceModel;
 import com.example.app.settings.UsersGroupModel;
 
-public enum ORM {
+public enum Orm {
 	INSTANCE;
 	
 	private Map<Class<?>, DataMap> map = new HashMap<>();
 	
-	ORM() {
+	Orm() {
 		map.put(UserModel.class, usersMap());
 		map.put(UsersGroupModel.class, groupsMap());
 		map.put(ResourceModel.class, resourcesMap());
