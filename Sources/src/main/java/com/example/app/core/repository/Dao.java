@@ -434,4 +434,31 @@ public class Dao {
 		
 		return result;
 	}
+	
+	public boolean deleteResource(int resourceId) {
+		if (!isResourceFree(resourceId)) {
+			return false;
+		}
+		boolean result = true;
+		
+		String sql = "delete from resource_groups where id = " + resourceId + ";";
+		
+		logger.info(sql);
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			result = false;
+			logger.error("Cannot delete resource with ID " + resourceId + ".", e);
+		}
+		
+		return result;
+	}
+	
+	private boolean isResourceFree(int resourceId) {
+		
+		QueryObject<ReservationModel> queryObject = repository.queryObjectBuilder(ReservationModel.class)
+				.addCriteria("resourceId", Criteria.SqlOperator.EQUAL, resourceId)
+				.build();
+		return queryObject.execute().isEmpty();
+	}
 }

@@ -73,9 +73,17 @@ public class ResourceController {
 		navigation.update();
 		
 		ResourceModel resource = dao.getResource(id);
+		model.addAttribute("id", id);
 		model.addAttribute("name", resource.getName());
 		model.addAttribute("description", resource.getDescription());
 		
 		return "/settings/resource_details";
+	}
+	
+	@GetMapping("/delete_resource")
+	public String deleteResource(@RequestParam(name="id", required=true) int id) {
+		
+		dao.deleteResource(id);
+		return "redirect:/settings/resources_list";
 	}
 }
