@@ -1,0 +1,34 @@
+<html>
+<head>
+</head>
+<body>
+
+	<div th:if="${logged}" th:fragment="homepage-panel">
+		<h4>Homepage panel</h4>
+		
+		<div class="divider"></div>
+		<h5>Your reservations</h5>
+		
+		
+		<a th:each="reservation : ${reservations}" th:href="${'/make_reservation?id=' + reservation.getReservation().getId()}">
+			<div class="card-panel hoverable reservation-card">
+				<div class="left-align">
+					<h5 th:text="${reservation.getReservation().getName()}">Reservation title</h5>
+					<p th:text="${reservation.getReservation().getDescription()}"></p>
+				<div class="divider"></div>
+			    <p>Made reservations</p>
+			    </div>
+			    <ul class="collection">
+			    	<li class="collection-item"
+						th:each="madeReservation : ${reservation.getMadeReservations()}"
+						th:text="${madeReservation.getLabel()}">Reserved</li>
+			   </ul>
+		
+			</div>
+		</a>
+		
+		
+	</div>
+	
+</body>
+</html>

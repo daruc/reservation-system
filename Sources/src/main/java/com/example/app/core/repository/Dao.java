@@ -321,7 +321,7 @@ public class Dao {
 	
 	public List<ReservationModel> getReservationsForUser(int userId) {
 		List<ReservationModel> reservations = new ArrayList<>();
-		String sql = "select r.id, r.name"
+		String sql = "select r.id, r.name, r.description"
 				+ " from reservations as r inner join user_group as ug on r.group_id = ug.group_id"
 				+ " where ug.user_id = ?;";
 		
@@ -334,6 +334,7 @@ public class Dao {
 				ReservationModel reservation = new ReservationModel();
 				reservation.setId(resultSet.getInt("id"));
 				reservation.setName(resultSet.getString("name"));
+				reservation.setDescription(resultSet.getString("description"));
 				reservations.add(reservation);
 			}
 		} catch (SQLException e) {

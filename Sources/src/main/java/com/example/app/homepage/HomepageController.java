@@ -1,7 +1,7 @@
 package com.example.app.homepage;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,21 +13,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.app.core.Link;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.repository.Dao;
-import com.example.app.core.repository.Repository;
+import com.example.app.reservation.AvailableReservationModel;
+import com.example.app.reservation.ReservationModel;
 
 @Controller
 public class HomepageController {
 	
-	private Repository repository;
 	private Dao dao;
 	private HttpSession httpSession;
 	
 	@Autowired
-	public HomepageController(Repository repository, Dao dao, HttpSession httpSession) {
-		this.repository = repository;
+	public HomepageController(Dao dao, HttpSession httpSession) {
 		this.dao = dao;
 		this.httpSession = httpSession;
 	}
@@ -70,6 +68,20 @@ public class HomepageController {
 		navigationBar.addBreadcrumb("/", "Home");
 		navigationBar.update();
 		
+		String login = (String) httpSession.getAttribute("login");
+		if (login != null) {
+			int userId = dao.getUser(login).getId();
+			List<ReservationModel> reservations = dao.getReservationsForUser(userId);
+			
+			List<ReservationsList> reservationsLists = reservations.stream()
+					.map(r -> new ReservationsList(r, dao.getMadeReservations(r.getId(), userId)))
+					.filter(r -> !r.getMadeReservations().isEmpty())
+					.collect(Collectors.toList());
+			
+			model.addAttribute("reservations", reservationsLists);
+		}
+		
+		
 		return "homepage/homepage";
 	}
 	
@@ -87,30 +99,21 @@ public class HomepageController {
 		return "homepage/sign_up";
 	}
 	
-	//==============================================================
-
-	@RequestMapping("reserve/time")
-	public String showReservationTime(Model model) {
-		model.addAttribute("title", "Reserve time");
-		model.addAttribute("logged", true);
-		Link home = new Link();
-		home.address = "/addr/to/home";
-		home.description = "Home";
-		List<Link> navigation = Arrays.asList(home, home, home);
-		model.addAttribute("navigation", navigation);
-		User user = new User();
-		user.name = "Dariusz";
-		user.surname = "Ruchała";
-		model.addAttribute("user", user);
+	private static class ReservationsList {
+		private ReservationModel reservation;
+		private List<AvailableReservationModel> madeReservations;
 		
-		return "reservation/time";
-	}
-	
-	public class User {
-		public String name;
-		public String surname;
-		public String getFullname() {
-			return name + ' ' + surname;
+		public ReservationsList(ReservationModel reservation, List<AvailableReservationModel> madeReservations) {
+			this.reservation = reservation;
+			this.madeReservations = madeReservations;
+		}
+		
+		public ReservationModel getReservation() {
+			return reservation;
+		}
+		
+		public List<AvailableReservationModel> getMadeReservations() {
+			return madeReservations;
 		}
 	}
 	
