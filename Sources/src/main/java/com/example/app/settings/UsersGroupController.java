@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 import com.example.app.homepage.UserModel;
 
 @Controller
 public class UsersGroupController {
 	
+	private ApplicationController appController;
 	private Dao dao;
 	private HttpSession httpSession;
 	
@@ -28,9 +31,20 @@ public class UsersGroupController {
 	}
 	
 	@Autowired
-	public UsersGroupController(Dao dao, HttpSession httpSession) {
+	public UsersGroupController(ApplicationController appController, Dao dao, HttpSession httpSession) {
+		this.appController = appController;
 		this.dao = dao;
 		this.httpSession = httpSession;
+		
+		setMinAccessLevels();
+	}
+	
+	private void setMinAccessLevels() {
+		appController.setMinAccessLevel("/settings/create_users_group", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/users_group", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/users_groups_list", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/users_group_details", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/add_user_to_group", AccessLevel.ADMIN);
 	}
 	
 	@GetMapping("/settings/create_users_group")
@@ -48,7 +62,7 @@ public class UsersGroupController {
 		return "/settings/create_users_group";
 	}
 	
-	@PostMapping("users_group")
+	@PostMapping("/users_group")
 	public String createUsersGroup(@ModelAttribute UsersGroupModel model) {
 		dao.createUsersGroup(model);
 		return "redirect:/settings";

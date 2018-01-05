@@ -35,7 +35,8 @@ public enum Orm {
 			.addFieldColumnMap(String.class, "login", "login")
 			.addFieldColumnMap(String.class, "password", "password")
 			.addFieldColumnMap(String.class, "name", "name")
-			.addFieldColumnMap(String.class, "surname", "surname");
+			.addFieldColumnMap(String.class, "surname", "surname")
+			.addFieldColumnMap(int.class, "accessLevel", "permissions");
 	}
 	
 	private DataMap groupsMap() {

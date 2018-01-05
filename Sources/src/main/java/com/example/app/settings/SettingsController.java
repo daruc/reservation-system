@@ -7,17 +7,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 
 @Controller
 public class SettingsController {
 
+	private ApplicationController appController;
 	private Dao dao;
 	private HttpSession httpSession;
 	
-	public SettingsController(Dao dao, HttpSession httpSession) {
+	public SettingsController(ApplicationController appController, Dao dao, HttpSession httpSession) {
+		this.appController = appController;
 		this.dao = dao;
 		this.httpSession = httpSession;
+		
+		setMinAccessLevels();
+	}
+	
+	private void setMinAccessLevels() {
+		appController.setMinAccessLevel("/settings", AccessLevel.ADMIN);
 	}
 	
 	@RequestMapping("/settings")

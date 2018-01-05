@@ -11,18 +11,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 import com.example.app.homepage.UserModel;
 
 @Controller
 public class UsersController {
 	
+	private ApplicationController appController;
 	private Dao dao;
 	private HttpSession httpSession;
 	
-	public UsersController(Dao dao, HttpSession httpSession) {
+	public UsersController(ApplicationController appController, Dao dao, HttpSession httpSession) {
+		this.appController = appController;
 		this.dao = dao;
 		this.httpSession = httpSession;
+		
+		setMinAccessLevels();
+	}
+	
+	private void setMinAccessLevels() {
+		appController.setMinAccessLevel("/settings/users_list", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/user_details", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/delete_user", AccessLevel.ADMIN);
 	}
 	
 	@RequestMapping("/settings/users_list")

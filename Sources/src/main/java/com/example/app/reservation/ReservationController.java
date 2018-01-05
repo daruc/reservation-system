@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 import com.example.app.homepage.UserModel;
 import com.example.app.settings.ResourceModel;
@@ -23,14 +25,26 @@ import com.example.app.settings.UsersGroupModel;
 @Controller
 public class ReservationController {
 	
+	private ApplicationController appController;
 	private Dao dao;
 	private HttpSession httpSession;
 	
 	@Autowired
-	ReservationController(Dao dao, HttpSession httpSession) {
+	ReservationController(ApplicationController appController, Dao dao, HttpSession httpSession) {
 		this.dao = dao;
 		this.httpSession = httpSession;
+		this.appController = appController;
+		
+		setMinAccessLevels();
 	}
+	
+	private void setMinAccessLevels() {
+		appController.setMinAccessLevel("/list", AccessLevel.LOGGED_IN);
+		appController.setMinAccessLevel("/create_reservation", AccessLevel.LOGGED_IN);
+		appController.setMinAccessLevel("/add_available_reservation", AccessLevel.LOGGED_IN);
+		appController.setMinAccessLevel("/delete_reservation", AccessLevel.ADMIN);
+	}
+	
 	
 	@RequestMapping("/list")
 	public String showList(Model model) {

@@ -2,7 +2,7 @@ package com.example.app.homepage;
 
 import java.util.Optional;
 
-import com.example.app.core.repository.Dao;
+import com.example.app.core.appcontroller.AccessLevel;
 
 public class UserModel {
 	
@@ -12,6 +12,7 @@ public class UserModel {
 	private String password;
 	private String name;
 	private String surname;
+	private AccessLevel accessLevel;
 	
 	
 	public void setId(int id) {
@@ -57,6 +58,12 @@ public class UserModel {
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	public int getAccessLevel() {
+		return accessLevel.toInt();
+	}
+	public void setAccessLevel(int accessLevel) {
+		this.accessLevel = AccessLevel.fromInt(accessLevel);
 	}
 	public String getFullname() {
 		if (name == null && surname == null) {

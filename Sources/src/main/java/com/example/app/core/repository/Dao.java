@@ -43,7 +43,7 @@ public class Dao {
 				.append(userFormModel.getName())
 				.append("', '")
 				.append(userFormModel.getSurname())
-				.append("', 0);")
+				.append("', 1);")
 				.toString();
 		
 		logger.info(sql);

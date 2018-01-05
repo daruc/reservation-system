@@ -13,18 +13,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 
 @Controller
 public class ResourceController {
 	
+	private ApplicationController appController;
 	private HttpSession httpSession;
 	private Dao dao;
 	
 	@Autowired
-	public ResourceController(HttpSession httpSession, Dao dao) {
+	public ResourceController(ApplicationController appController, HttpSession httpSession, Dao dao) {
+		this.appController = appController;
 		this.httpSession = httpSession;
 		this.dao = dao;
+		
+		setMinAccessLevels();
+	}
+	
+	private void setMinAccessLevels() {
+		appController.setMinAccessLevel("/settings/create_resource", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/resources_list", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/settings/resource_details", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/delete_resource", AccessLevel.ADMIN);
 	}
 	
 	@GetMapping("/settings/create_resource")

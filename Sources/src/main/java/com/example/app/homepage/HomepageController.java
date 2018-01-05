@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
 import com.example.app.reservation.AvailableReservationModel;
 import com.example.app.reservation.ReservationModel;
@@ -21,13 +23,25 @@ import com.example.app.reservation.ReservationModel;
 @Controller
 public class HomepageController {
 	
+	private ApplicationController appController;
 	private Dao dao;
 	private HttpSession httpSession;
 	
 	@Autowired
-	public HomepageController(Dao dao, HttpSession httpSession) {
+	public HomepageController(ApplicationController appController, Dao dao, HttpSession httpSession) {
+		this.appController = appController;
 		this.dao = dao;
 		this.httpSession = httpSession;
+		
+		setAccessLevels();
+	}
+	
+	private void setAccessLevels() {
+		appController.setMinAccessLevel("/create_user", AccessLevel.EVERYONE);
+		appController.setMinAccessLevel("/login", AccessLevel.EVERYONE);
+		appController.setMinAccessLevel("/logout", AccessLevel.EVERYONE);
+		appController.setMinAccessLevel("/", AccessLevel.EVERYONE);
+		appController.setMinAccessLevel("/sign_up", AccessLevel.EVERYONE);
 	}
 	
 	@ModelAttribute
@@ -36,7 +50,7 @@ public class HomepageController {
 		return model;
 	}
 
-	@PostMapping("create_user")
+	@PostMapping("/create_user")
 	public String createUser(@ModelAttribute UserModel createUserModel) {
 		dao.createUser(createUserModel);
 		return "redirect:/";
@@ -47,15 +61,18 @@ public class HomepageController {
 		return new LoginModel(dao);
 	}
 	
-	@PostMapping("login")
+	@PostMapping("/login")
 	public String login(@ModelAttribute LoginModel loginModel) {
 		if (loginModel.isCorrect()) {
 			httpSession.setAttribute("login", loginModel.getLogin());
+			
+			UserModel userModel = dao.getUser(loginModel.getLogin());
+			httpSession.setAttribute("access_level", userModel.getAccessLevel());
 		}
 		return "redirect:/";
 	}
 	
-	@GetMapping("logout")
+	@GetMapping("/logout")
 	public String logout() {
 		httpSession.invalidate();
 		return "redirect:/";
@@ -63,6 +80,8 @@ public class HomepageController {
 	
 	@RequestMapping("/")
 	public String showHomepage(Model model) {
+		appController.setMinAccessLevel("/", AccessLevel.EVERYONE);
+		
 		model.addAttribute("title", "Reservation System");
 		NavigationBarController navigationBar = new NavigationBarController(httpSession, model, dao);
 		navigationBar.addBreadcrumb("/", "Home");
