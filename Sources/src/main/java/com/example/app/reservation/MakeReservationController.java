@@ -1,6 +1,7 @@
 package com.example.app.reservation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -51,6 +52,13 @@ public class MakeReservationController {
 		List<AvailableReservationModel> madeReservations = dao.getMadeReservations(id, user.getId());
 		model.addAttribute("made_reservations", madeReservations);
 		
+		List<AvailableReservationModel> allMadeReservations = dao.getMadeReservations(id);
+		List<MadeReservationWrapper> allMadeReservationsWithUsers = allMadeReservations.stream()
+				.map(r -> new MadeReservationWrapper(dao.getUser(r.getUserId()), r))
+				.collect(Collectors.toList());
+		
+		model.addAttribute("all_made_reservations", allMadeReservationsWithUsers);
+		
 		return "/reservation/make_reservation";
 	}
 	
@@ -72,6 +80,24 @@ public class MakeReservationController {
 		dao.cancelReservation(availableReservationId);
 		AvailableReservationModel availableReservation = dao.getMadeReservation(availableReservationId);
 		return "redirect:/make_reservation?id=" + availableReservation.getReservationId();
+	}
+	
+	private static class MadeReservationWrapper {
+		private UserModel user;
+		private AvailableReservationModel reservation;
+		
+		public MadeReservationWrapper(UserModel user, AvailableReservationModel reservation) {
+			this.user = user;
+			this.reservation = reservation;
+		}
+		
+		public UserModel getUser() {
+			return user;
+		}
+		
+		public AvailableReservationModel getReservation() {
+			return reservation;
+		}
 	}
 
 }

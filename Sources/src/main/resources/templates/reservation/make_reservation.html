@@ -26,6 +26,7 @@
 			
 			<div class="divider"></div>
 			<h5>Actions</h5>
+			
 			<a class="waves-effect waves-light btn"
 				th:href="${'/delete_reservation?id=' + reservation.getId()}">Delete</a>
 			
@@ -48,6 +49,22 @@
 					th:href="${'/reserve?id=' + av_reservation.getId()}"
 					></a>
 			</div>
+			
+			<div class="divider"></div>
+			<h5>All made reservations</h5>
+			<table class="striped">
+				<thead>
+					<th>User's login</th>
+					<th>Made reservation</th>
+				<thead>
+				
+				<tr th:each="made_reservation : ${all_made_reservations}">
+					<td th:text="${made_reservation.getUser().getLogin()}">Login</td>
+					<td th:text="${made_reservation.getReservation().getLabel()}">Made reservation</td>
+				</tr>
+				
+				
+			</table>
 			
 		</div>
 	</div>

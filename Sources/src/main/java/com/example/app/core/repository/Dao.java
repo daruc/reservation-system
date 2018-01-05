@@ -391,6 +391,17 @@ public class Dao {
 		return queryObject.execute();
 	}
 	
+	public List<AvailableReservationModel> getMadeReservations(int reservationId) {
+		
+		QueryObject<AvailableReservationModel> queryObject = 
+				repository.queryObjectBuilder(AvailableReservationModel.class)
+				.addCriteria("reservationId", Criteria.SqlOperator.EQUAL, reservationId)
+				.addCriteria("userId", Criteria.SqlOperator.IS_NOT, null)
+				.build();
+		
+		return queryObject.execute();
+	}
+	
 	public AvailableReservationModel getMadeReservation(int availableReservationId) {
 		
 		QueryObject<AvailableReservationModel> queryObject = 

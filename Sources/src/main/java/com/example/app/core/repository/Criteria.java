@@ -13,7 +13,8 @@ public class Criteria {
 	  
 	  public static enum SqlOperator {
 		  EQUAL("="),
-		  IS("is");
+		  IS("is"),
+		  IS_NOT("is not");
 		  
 		  private String strOperator;
 		  
