@@ -1,0 +1,28 @@
+Running requirements:
+* Java 8,
+* PostgreSQL,
+* Browser.
+
+Building requirements:
+* Internet connection,
+* JDK 8,
+* Maven 3.x,
+* PostgreSQL,
+* psql - PostgreSQL interactive terminal.
+
+In order to configure database:
+* Create database "reservation_system_db"
+* Open psql -S reservation_system_db
+* Execute script reservation-system/Sources/sql/create_tables.sql which creates appriopriate tables
+* Edit script create_admin.sql which creates administrator account.
+* Execute script create_admin.sql.
+
+
+In order to build project:
+* Configure application database URL in file reservation-system/Sources/src/main/resources/application.porperties.
+* Execute in the reservation-system/Source directory mvn clean install.
+
+In order to run project (Red Hat):
+* sudo systemctl start postgresql
+* In Maven's target directory: java -jar reservation-system-0.0.1-SNAPSHOT.jar
+* Open in the browser localhost:8080
