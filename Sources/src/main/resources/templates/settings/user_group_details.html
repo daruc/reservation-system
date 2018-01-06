@@ -22,10 +22,16 @@
 				<p>Name: <span th:text="${users_group.getName()}"></span></p>
 				<p>Description: <span th:text="${users_group.getDescription()}"></span></p>
 			</div>
+			
+			<div class="divider"></div>
+			<h5>Actions</h5>
+			<a class="waves-effect waves-light btn"
+				th:href="${'/delete_users_group?group_id=' + users_group.getId()}">Delete</a>
+			
 			<div class="divider"></div>
 			<h5>Members</h5>
 			<div class="collection">
-				<a th:href="'!#'"
+				<a th:href="${'/settings/user_details?id=' + user.getId()}"
 					class="collection-item"
 					 th:each="user : ${users_list}" th:text="${user.getLogin()}"></a>
 			</div>

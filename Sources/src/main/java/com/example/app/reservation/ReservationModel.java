@@ -21,13 +21,17 @@ public class ReservationModel {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		if (name != null) {
+			this.name = name.trim();
+		}
 	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
-		this.description = description;
+		if (description != null) {
+			this.description = description.trim();
+		}
 	}
 	public int getAuthorId() {
 		return authorId;

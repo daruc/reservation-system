@@ -60,7 +60,7 @@ public class UsersController {
 		navigation.addBreadcrumb("/", "Home");
 		navigation.addBreadcrumb("/settings", "Settings");
 		navigation.addBreadcrumb("/settings/users_list", "Users List");
-		navigation.addBreadcrumb("/settings/users_list/user_details?id=" + userId, "User Details");
+		navigation.addBreadcrumb("/settings/user_details?id=" + userId, "User Details");
 		navigation.update();
 		
 		UserModel user = dao.getUser(userId);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
@@ -42,6 +43,7 @@ public class ReservationController {
 		appController.setMinAccessLevel("/list", AccessLevel.LOGGED_IN);
 		appController.setMinAccessLevel("/create_reservation", AccessLevel.LOGGED_IN);
 		appController.setMinAccessLevel("/add_available_reservation", AccessLevel.LOGGED_IN);
+		appController.setMinAccessLevel("/add_available_reservations", AccessLevel.LOGGED_IN);
 		appController.setMinAccessLevel("/delete_reservation", AccessLevel.ADMIN);
 	}
 	
@@ -81,7 +83,9 @@ public class ReservationController {
 		List<ResourceModel> resources = dao.getAllResources();
 		model.addAttribute("resources", resources);
 		
-		List<UsersGroupModel> usersGroups = dao.getAllUsersGroups();
+		String login = (String) httpSession.getAttribute("login");
+		int userId = dao.getUser(login).getId();
+		List<UsersGroupModel> usersGroups = dao.getAllUsersGroupsAssignedToUser(userId);
 		model.addAttribute("users_groups", usersGroups);
 		
 		return "/reservation/create_reservation";
@@ -94,9 +98,15 @@ public class ReservationController {
 		UserModel user = dao.getUser(login);
 		reservation.setAuthorId(user.getId());
 		
-		dao.createReservation(reservation);
-		return "redirect:/add_available_reservation?id=" + reservation.getId()
-				+ "&size=" + reservation.getQuantity();
+		Validator validator = new AddReservationValidator(reservation);
+		
+		if (validator.isValid()) {
+			dao.createReservation(reservation);
+			return "redirect:/add_available_reservation?id=" + reservation.getId()
+					+ "&size=" + reservation.getQuantity();
+		}
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/add_available_reservation")

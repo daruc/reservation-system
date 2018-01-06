@@ -153,6 +153,30 @@ public class Dao {
 		return queryObject.execute();
 	}
 	
+	public List<UsersGroupModel> getAllUsersGroupsAssignedToUser(int userId) {
+		List<UsersGroupModel> usersGroups = new ArrayList<>();
+		
+		String sql = "select g.id, g.name, g.description from groups as g"
+				+ " join user_group as ug on g.id = ug.group_id"
+				+ " where ug.user_id = " + userId + ";";
+		
+		logger.info(sql);
+		try (Connection con = dataSource.getConnection()) {
+			ResultSet resultSet = con.prepareStatement(sql).executeQuery();
+			while (resultSet.next()) {
+				UsersGroupModel usersGroup = new UsersGroupModel();
+				usersGroup.setId(resultSet.getInt("id"));
+				usersGroup.setName(resultSet.getString("name"));
+				usersGroup.setDescription(resultSet.getString("description"));
+				usersGroups.add(usersGroup);
+			}
+		} catch (SQLException e) {
+			logger.error("Cannot get all Users Groups assigned to user with ID " + userId + ".", e);
+		}
+		
+		return usersGroups;
+	}
+	
 	public UsersGroupModel getUserGroup(int id) {
 		
 		QueryObject<UsersGroupModel> queryObject = repository.queryObjectBuilder(UsersGroupModel.class)
@@ -472,6 +496,37 @@ public class Dao {
 		QueryObject<ReservationModel> queryObject = repository.queryObjectBuilder(ReservationModel.class)
 				.addCriteria("resourceId", Criteria.SqlOperator.EQUAL, resourceId)
 				.build();
+		return queryObject.execute().isEmpty();
+	}
+	
+	public boolean deleteUsersGroup(int groupId) {
+		if (!isUsersGroupFree(groupId)) {
+			return false;
+		}
+		boolean result = true;
+		
+		String sql1 = "delete from groups where id = " + groupId + ";";
+		String sql2 = "delete from user_group where group_id = " + groupId + ";";
+		
+		logger.info(sql1);
+		logger.info(sql2);
+		try (Connection con = dataSource.getConnection()) {
+			con.prepareStatement(sql1).execute();
+			con.prepareStatement(sql2).execute();
+		} catch (SQLException e) {
+			result = false;
+			logger.error("Cannot delete Users Group with ID " + groupId + ".", e);
+		}
+		
+		return result;
+	}
+	
+	public boolean isUsersGroupFree(int groupId) {
+		
+		QueryObject<ReservationModel> queryObject = repository.queryObjectBuilder(ReservationModel.class)
+				.addCriteria("groupId", Criteria.SqlOperator.EQUAL, groupId)
+				.build();
+		
 		return queryObject.execute().isEmpty();
 	}
 }

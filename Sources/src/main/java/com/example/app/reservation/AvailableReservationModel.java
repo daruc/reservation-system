@@ -14,7 +14,9 @@ public class AvailableReservationModel {
 	}
 
 	public void setLabel(String label) {
-		this.label = label;
+		if (label != null) {
+			this.label = label.trim();
+		}
 	}
 
 	public int getReservationId() {

@@ -39,7 +39,9 @@ public class UserModel {
 		return login;
 	}
 	public void setLogin(String login) {
-		this.login = login;
+		if (login != null) {
+			this.login = login.trim();
+		}
 	}
 	public String getPassword() {
 		return password;
@@ -51,13 +53,17 @@ public class UserModel {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		if (name != null) {
+			this.name = name.trim();
+		}
 	}
 	public String getSurname() {
 		return surname;
 	}
 	public void setSurname(String surname) {
-		this.surname = surname;
+		if (surname != null) {
+			this.surname = surname.trim();
+		}
 	}
 	public int getAccessLevel() {
 		return accessLevel.toInt();

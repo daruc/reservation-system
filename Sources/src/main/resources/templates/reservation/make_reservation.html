@@ -24,7 +24,7 @@
 				<p>Description: <span th:text="${reservation.getDescription()}"></span></p>
 			</div>
 			
-			<div th:if="${reservation.getAuthorId() == user.getId()}">
+			<div th:if="${reservation.getAuthorId() == user.getId() || user.getAccessLevel() == 2}">
 				<div class="divider"></div>
 				<h5>Actions</h5>
 				

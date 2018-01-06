@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
@@ -45,6 +46,7 @@ public class UsersGroupController {
 		appController.setMinAccessLevel("/settings/users_groups_list", AccessLevel.ADMIN);
 		appController.setMinAccessLevel("/settings/users_group_details", AccessLevel.ADMIN);
 		appController.setMinAccessLevel("/settings/add_user_to_group", AccessLevel.ADMIN);
+		appController.setMinAccessLevel("/delete_users_group", AccessLevel.ADMIN);
 	}
 	
 	@GetMapping("/settings/create_users_group")
@@ -64,8 +66,15 @@ public class UsersGroupController {
 	
 	@PostMapping("/users_group")
 	public String createUsersGroup(@ModelAttribute UsersGroupModel model) {
-		dao.createUsersGroup(model);
-		return "redirect:/settings";
+		
+		Validator validator = new CreateUsersGroupValidator(model);
+		
+		if (validator.isValid()) {
+			dao.createUsersGroup(model);
+			return "redirect:/settings";
+		}
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/settings/users_groups_list")
@@ -131,5 +140,11 @@ public class UsersGroupController {
 		dao.addUsersToGroup(userIds, groupId);
 		
 		return "redirect:/settings/users_group_details?id=" + String.valueOf(groupId);
+	}
+	
+	@GetMapping("/delete_users_group")
+	public String deleteUsersGroup(@RequestParam(name="group_id", required=true) int groupId) {
+		dao.deleteUsersGroup(groupId);
+		return "redirect:/settings/users_groups_list";
 	}
 }

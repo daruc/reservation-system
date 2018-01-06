@@ -26,7 +26,7 @@
 			<form action="/create_reservation" method="post" th:object="${reservation_model}">
 				<div class="row">
 					<div class="col input-field s12">
-						<input id="form-name" type="text" th:field="*{name}"/>
+						<input id="form-name" type="text" th:field="*{name}" required/>
 						<label for="form-name">Name</label>
 					</div>
 					<div class="col input-field s12">

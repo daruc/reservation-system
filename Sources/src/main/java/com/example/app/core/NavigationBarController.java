@@ -41,7 +41,7 @@ public class NavigationBarController {
 		}
 		
 		UserModel user = dao.getUser((String) login);
-		model.addAttribute("user", user);
+		model.addAttribute("logged_user", user);
 		model.addAttribute("navigation", navigationPath);
 	}
 }

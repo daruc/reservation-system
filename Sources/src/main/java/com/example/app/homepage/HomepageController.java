@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
@@ -52,7 +53,11 @@ public class HomepageController {
 
 	@PostMapping("/create_user")
 	public String createUser(@ModelAttribute UserModel createUserModel) {
-		dao.createUser(createUserModel);
+		Validator validator = new CreateUserValidator(createUserModel);
+		
+		if (validator.isValid()) {
+			dao.createUser(createUserModel);
+		}
 		return "redirect:/";
 	}
 	

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.core.NavigationBarController;
+import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
 import com.example.app.core.repository.Dao;
@@ -56,8 +57,14 @@ public class ResourceController {
 	
 	@PostMapping("/settings/create_resource")
 	public String createResource(@ModelAttribute ResourceModel resource) {
-		dao.createResource(resource);
-		return "redirect:/settings";
+		Validator validator = new CreateResourceValidator(resource);
+		
+		if (validator.isValid()) {
+			dao.createResource(resource);
+			return "redirect:/settings";
+		}
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/settings/resources_list")
@@ -82,7 +89,7 @@ public class ResourceController {
 		navigation.addBreadcrumb("/", "Home");
 		navigation.addBreadcrumb("/settings", "Settings");
 		navigation.addBreadcrumb("/settings/resources_list", "Resources list");
-		navigation.addBreadcrumb("/settings/resource_details", "Resource details");
+		navigation.addBreadcrumb("/settings/resource_details?id=" + id, "Resource details");
 		navigation.update();
 		
 		ResourceModel resource = dao.getResource(id);

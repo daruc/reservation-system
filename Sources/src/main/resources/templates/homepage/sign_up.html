@@ -18,19 +18,19 @@
 			<form action="/create_user" th:object="${form_model}" method="post">
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="sign-up-form-login" type="text" class="validate" th:field="*{login}">
+						<input id="sign-up-form-login" type="text" class="validate" th:field="*{login}" required>
 						<label for="sign-up-form-login">Login </label>
 					</div>
 					<div class="input-field col s12">
-						<input id="sign-up-form-password" type="password" class="validate" th:field="*{password}">
+						<input id="sign-up-form-password" type="password" class="validate" th:field="*{password}" required>
 						<label for="sign-up-form-password">Password </label>
 					</div>
 					<div class="input-field col s12">
-						<input id="sign-up-form-name" type="text" class="validate" th:field="*{name}">
+						<input id="sign-up-form-name" type="text" class="validate" th:field="*{name}" required>
 						<label for="sign-up-form-name">Name </label>
 					</div>
 					<div class="input-field col s12">
-						<input id="sign-up-form-surname" type="text" class="validate" th:field="*{surname}">
+						<input id="sign-up-form-surname" type="text" class="validate" th:field="*{surname}" required>
 						<label for="sign-up-form-surname">Surname </label>
 					</div>
 				</div>
