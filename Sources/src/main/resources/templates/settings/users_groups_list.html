@@ -18,7 +18,7 @@
 			<h4>Users Groups</h4>
 			<div class="divider"></div>
 			<div class="collection">
-				<a th:href="${'/settings/users_group_details/?id=' + users_group.getId()}"
+				<a th:href="${'/settings/users_group_details?id=' + users_group.getId()}"
 					class="collection-item"
 					 th:each="users_group : ${users_groups_list}" th:text="${users_group.getName()}"></a>
 			</div>

@@ -3,11 +3,15 @@ package com.example.app.core.appcontroller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
 	@Autowired
 	private ApplicationController applicationController;
@@ -17,6 +21,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		if (!applicationController.hasPermissions(request)) {
+			logger.warn("Not allowed query. Path: " + request.getServletPath());
 			response.sendRedirect("/");
 			return false;
 		}
@@ -27,14 +32,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("AuthenticationInterceptor.postHandle()");
 		
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		System.out.println("AuthenticationInterceptor.afterCompletion()");
 	}
 
 }

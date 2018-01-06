@@ -33,6 +33,8 @@ public class NavigationBarController {
 		Object login = httpSession.getAttribute("login");
 		if (login != null) {
 			model.addAttribute("logged", true);
+			int accessLevel = (int) httpSession.getAttribute("access_level");
+			model.addAttribute("access_level", accessLevel);
 		} else {
 			model.addAttribute("logged", false);
 			model.addAttribute("login_form_model", new LoginModel(dao));

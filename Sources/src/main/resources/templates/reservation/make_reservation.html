@@ -24,48 +24,55 @@
 				<p>Description: <span th:text="${reservation.getDescription()}"></span></p>
 			</div>
 			
-			<div class="divider"></div>
-			<h5>Actions</h5>
-			
-			<a class="waves-effect waves-light btn"
-				th:href="${'/delete_reservation?id=' + reservation.getId()}">Delete</a>
-			
-			<div class="divider"></div>
-			<h5>Made reservations</h5>
-			<h6>Choose to cancel</h6>
-			<div class="collection">
-				<a th:each="made_reservation : ${made_reservations}"
-					th:text="${made_reservation.getLabel()}"
-					class="collection-item"
-					th:href="${'/cancel_reservation?id=' + made_reservation.getId()}"></a>
+			<div th:if="${reservation.getAuthorId() == user.getId()}">
+				<div class="divider"></div>
+				<h5>Actions</h5>
+				
+				<a class="waves-effect waves-light btn"
+					th:href="${'/delete_reservation?id=' + reservation.getId()}">Delete</a>
+					
 			</div>
 			
-			<div class="divider"></div>
-			<h5>Available reservations</h5>
-			<div class="collection">
-				<a th:each="av_reservation : ${av_reservations}"
-					th:text="${av_reservation.getLabel()}"
-					class="collection-item"
-					th:href="${'/reserve?id=' + av_reservation.getId()}"
-					></a>
+			<div th:if="${!made_reservations.isEmpty()}">
+				<div class="divider"></div>
+				<h5>Made reservations</h5>
+				<h6>Choose to cancel</h6>
+				<div class="collection">
+					<a th:each="made_reservation : ${made_reservations}"
+						th:text="${made_reservation.getLabel()}"
+						class="collection-item"
+						th:href="${'/cancel_reservation?id=' + made_reservation.getId()}"></a>
+				</div>
 			</div>
 			
-			<div class="divider"></div>
-			<h5>All made reservations</h5>
-			<table class="striped">
-				<thead>
-					<th>User's login</th>
-					<th>Made reservation</th>
-				<thead>
-				
-				<tr th:each="made_reservation : ${all_made_reservations}">
-					<td th:text="${made_reservation.getUser().getLogin()}">Login</td>
-					<td th:text="${made_reservation.getReservation().getLabel()}">Made reservation</td>
-				</tr>
-				
-				
-			</table>
+			<div th:if="${!av_reservations.isEmpty()}">
+				<div class="divider"></div>
+				<h5>Available reservations</h5>
+				<div class="collection">
+					<a th:each="av_reservation : ${av_reservations}"
+						th:text="${av_reservation.getLabel()}"
+						class="collection-item"
+						th:href="${'/reserve?id=' + av_reservation.getId()}"
+						></a>
+				</div>
+			</div>
 			
+			<div th:if="${reservation.getAuthorId() == user.getId()}">
+				<div class="divider"></div>
+				<h5>All made reservations</h5>
+				<table class="striped">
+					<thead>
+						<th>User's login</th>
+						<th>Made reservation</th>
+					<thead>
+					
+					<tr th:each="made_reservation : ${all_made_reservations}">
+						<td th:text="${made_reservation.getUser().getLogin()}">Login</td>
+						<td th:text="${made_reservation.getReservation().getLabel()}">Made reservation</td>
+					</tr>
+					
+				</table>
+			</div>
 		</div>
 	</div>
 

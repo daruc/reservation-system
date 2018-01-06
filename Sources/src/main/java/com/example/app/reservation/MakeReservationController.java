@@ -58,6 +58,7 @@ public class MakeReservationController {
 		
 		String login = (String) httpSession.getAttribute("login");
 		UserModel user = dao.getUser(login);
+		model.addAttribute("user", user);
 		
 		List<AvailableReservationModel> madeReservations = dao.getMadeReservations(id, user.getId());
 		model.addAttribute("made_reservations", madeReservations);

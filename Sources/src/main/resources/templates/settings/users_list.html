@@ -18,7 +18,7 @@
 			<h4>Users List</h4>
 			<div class="divider"></div>
 			<div class="collection">
-				<a th:href="${'/settings/user_details/?id=' + user.getId()}"
+				<a th:href="${'/settings/user_details?id=' + user.getId()}"
 					class="collection-item"
 					 th:each="user : ${users}" th:text="${user.getLogin()}"></a>
 			</div>

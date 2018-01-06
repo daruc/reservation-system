@@ -91,7 +91,7 @@ public class UsersGroupController {
 		navigation.addBreadcrumb("/", "Home");
 		navigation.addBreadcrumb("/settings", "Settings");
 		navigation.addBreadcrumb("/settings/users_groups_list", "Users Group List");
-		navigation.addBreadcrumb("/settings/users_group_details", "Users Group Details");
+		navigation.addBreadcrumb("/settings/users_group_details?id=" + userGroupId, "Users Group Details");
 		navigation.update();
 		
 		UsersGroupModel usersGroup = dao.getUserGroup(userGroupId);
@@ -115,7 +115,7 @@ public class UsersGroupController {
 		navigation.addBreadcrumb("/settings/add_user_to_group", "Add user to group");
 		navigation.update();
 		
-		List<UserModel> users = dao.getAllUsersWithoutGroup();
+		List<UserModel> users = dao.getAllUsersNotAssignedTo(groupId);
 		model.addAttribute("users", users);
 		model.addAttribute("groupId", groupId);
 		

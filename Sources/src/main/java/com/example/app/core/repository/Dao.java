@@ -167,10 +167,11 @@ public class Dao {
 		}
 	}
 	
-	public List<UserModel> getAllUsersWithoutGroup() {
+	public List<UserModel> getAllUsersNotAssignedTo(int groupId) {
 		List<UserModel> usersList = new ArrayList<>();
 		String sql = "select id, login, password, name, surname from users"
-				+ " where id not in (select distinct user_id from user_group)";
+				+ " where id not in (select distinct user_id from user_group where group_id = "
+				+ groupId + ")";
 		
 		logger.info(sql);
 		try (Connection con = dataSource.getConnection()) {
