@@ -1,8 +1,9 @@
 package com.example.app.reservation;
 
-public class ReservationModel {
+import com.example.app.core.DomainModel;
+
+public class ReservationModel extends DomainModel {
 	
-	private int id;
 	private String name;
 	private String description;
 	private int authorId;
@@ -11,12 +12,6 @@ public class ReservationModel {
 	
 	private int quantity;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}

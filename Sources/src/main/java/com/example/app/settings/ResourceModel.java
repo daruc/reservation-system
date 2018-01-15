@@ -1,17 +1,12 @@
 package com.example.app.settings;
 
-public class ResourceModel {
+import com.example.app.core.DomainModel;
+
+public class ResourceModel extends DomainModel {
 	
-	private int id;
 	private String name;
 	private String description;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}

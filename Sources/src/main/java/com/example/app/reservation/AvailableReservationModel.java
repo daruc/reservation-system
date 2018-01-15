@@ -1,8 +1,9 @@
 package com.example.app.reservation;
 
-public class AvailableReservationModel {
+import com.example.app.core.DomainModel;
+
+public class AvailableReservationModel extends DomainModel {
 	
-	private int id;
 	private String label;
 	private int reservationId;
 	private int userId;
@@ -25,14 +26,6 @@ public class AvailableReservationModel {
 
 	public void setReservationId(int reservationId) {
 		this.reservationId = reservationId;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public Boolean getChecked() {

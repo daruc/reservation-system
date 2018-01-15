@@ -2,26 +2,17 @@ package com.example.app.homepage;
 
 import java.util.Optional;
 
+import com.example.app.core.DomainModel;
 import com.example.app.core.appcontroller.AccessLevel;
 
-public class UserModel {
+public class UserModel extends DomainModel {
 	
-	private int id;
 	private Optional<Integer> groupId = Optional.empty();
 	private String login;
 	private String password;
 	private String name;
 	private String surname;
 	private AccessLevel accessLevel;
-	
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
-	}
 	
 	public void setGroupId(Integer groupId) {
 		this.groupId = Optional.of(groupId);
