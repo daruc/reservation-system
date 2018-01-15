@@ -23,4 +23,9 @@ public final class Description {
 	public int hashCode() {
 		return description.hashCode();
 	}
+	
+	private static final Description EMPTY = new Description("");
+	public static final Description getEmpty() {
+		return EMPTY;
+	}
 }

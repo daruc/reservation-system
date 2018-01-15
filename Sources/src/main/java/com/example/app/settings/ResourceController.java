@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
@@ -61,14 +62,18 @@ public class ResourceController {
 		
 		if (validator.isValid()) {
 			dao.createResource(resource);
-			return "redirect:/settings";
+			return "redirect:/settings?event=" + Event.RESOURCE_CREATED.getName();
 		}
 		
 		return "redirect:/";
 	}
 	
 	@GetMapping("/settings/resources_list")
-	public String showResources(Model model) {
+	public String showResources(Model model, @RequestParam(name="event", required=false) String event) {
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
+		
 		model.addAttribute("title", "Resources list");
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
 		navigation.addBreadcrumb("/", "Home");
@@ -104,6 +109,6 @@ public class ResourceController {
 	public String deleteResource(@RequestParam(name="id", required=true) int id) {
 		
 		dao.deleteResource(id);
-		return "redirect:/settings/resources_list";
+		return "redirect:/settings/resources_list?event=" + Event.RESOURCE_DELETED.getName();
 	}
 }

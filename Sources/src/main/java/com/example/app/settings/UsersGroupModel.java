@@ -6,8 +6,8 @@ import com.example.app.core.valueobjects.Name;
 
 public class UsersGroupModel extends DomainModel {
 	
-	private Name name;
-	private Description description;
+	private Name name = Name.getEmpty();
+	private Description description = Description.getEmpty();
 	
 	public String getName() {
 		return name.getName();

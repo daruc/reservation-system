@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
@@ -49,10 +50,11 @@ public class ReservationController {
 	
 	
 	@RequestMapping("/list")
-	public String showList(Model model) {
+	public String showList(Model model, @RequestParam(name="event", required=false) String event) {
 		String login = (String) httpSession.getAttribute("login");
-		if (login == null) {
-			return "redirect:/";
+		
+		if (event != null) {
+			model.addAttribute("event", event);
 		}
 		
 		model.addAttribute("title", "Reservations list");
@@ -141,13 +143,13 @@ public class ReservationController {
 		reservations.getAvailableReservations().forEach(obj -> obj.setReservationId(reservationId));
 		reservations.getAvailableReservations().forEach(dao::createAvailableReservation);
 		
-		return "redirect:/list";
+		return "redirect:/list?event=" + Event.RESERVATION_CREATED.getName();
 	}
 	
 	@GetMapping("/delete_reservation")
 	public String deleteReservation(@RequestParam(name="id", required=true) int reservationId) {
 		
 		dao.deleteReservation(reservationId);
-		return "redirect:/list";
+		return "redirect:/list?event=" + Event.RESERVATION_DELETED.getName();
 	}
 }

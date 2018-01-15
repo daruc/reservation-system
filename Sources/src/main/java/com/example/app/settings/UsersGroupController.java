@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
@@ -71,14 +72,17 @@ public class UsersGroupController {
 		
 		if (validator.isValid()) {
 			dao.createUsersGroup(model);
-			return "redirect:/settings";
+			return "redirect:/settings?event=" + Event.USERS_GROUP_CREATED.getName();
 		}
 		
 		return "redirect:/";
 	}
 	
 	@GetMapping("/settings/users_groups_list")
-	public String getUsersGroupsList(Model model) {
+	public String getUsersGroupsList(Model model, @RequestParam(name="event", required=false) String event) {
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
 		model.addAttribute("title", "Users Groups List");
 		
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
@@ -93,7 +97,14 @@ public class UsersGroupController {
 	}
 	
 	@GetMapping("/settings/users_group_details")
-	public String showUserGroupDetails(Model model, @RequestParam(name="id", required=true) int userGroupId) {
+	public String showUserGroupDetails(Model model,
+			@RequestParam(name="id", required=true) int userGroupId,
+			@RequestParam(name="event", required=false) String event) {
+		
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
+		
 		model.addAttribute("title", "Users Group Details");
 		
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
@@ -139,12 +150,13 @@ public class UsersGroupController {
 		
 		dao.addUsersToGroup(userIds, groupId);
 		
-		return "redirect:/settings/users_group_details?id=" + String.valueOf(groupId);
+		return "redirect:/settings/users_group_details?id=" + String.valueOf(groupId)
+			+ "&event=" + Event.ADDED_USERS_TO_GROUP.getName();
 	}
 	
 	@GetMapping("/delete_users_group")
 	public String deleteUsersGroup(@RequestParam(name="group_id", required=true) int groupId) {
 		dao.deleteUsersGroup(groupId);
-		return "redirect:/settings/users_groups_list";
+		return "redirect:/settings/users_groups_list?event=" + Event.USERS_GROUP_DELETED.getName();
 	}
 }

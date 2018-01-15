@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.Validator;
 import com.example.app.core.appcontroller.AccessLevel;
@@ -58,7 +60,7 @@ public class HomepageController {
 		if (validator.isValid()) {
 			dao.createUser(createUserModel);
 		}
-		return "redirect:/";
+		return "redirect:/?event=" + Event.USER_CREATED.getName();
 	}
 	
 	@ModelAttribute
@@ -84,8 +86,10 @@ public class HomepageController {
 	}
 	
 	@RequestMapping("/")
-	public String showHomepage(Model model) {
-		appController.setMinAccessLevel("/", AccessLevel.EVERYONE);
+	public String showHomepage(Model model, @RequestParam(name="event", required=false) String event) {
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
 		
 		model.addAttribute("title", "Reservation System");
 		NavigationBarController navigationBar = new NavigationBarController(httpSession, model, dao);

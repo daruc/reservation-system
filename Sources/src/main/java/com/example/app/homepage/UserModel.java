@@ -12,8 +12,8 @@ public class UserModel extends DomainModel {
 	private Optional<Integer> groupId = Optional.empty();
 	private String login;
 	private String password;
-	private Name name;
-	private Surname surname;
+	private Name name = Name.getEmpty();
+	private Surname surname = Surname.getEmpty();
 	private AccessLevel accessLevel;
 	
 	public void setGroupId(Integer groupId) {

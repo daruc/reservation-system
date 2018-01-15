@@ -7,8 +7,13 @@ public class Surname {
 		if (surname == null) {
 			throw new IllegalArgumentException("Surname cannot be empty.");
 		}
-		String surnameTrim = surname.trim();
-		this.surname = Character.toUpperCase(surnameTrim.charAt(0)) + surnameTrim.substring(1);
+		
+		if (surname.equals("")) {
+			this.surname = surname;
+		} else {
+			String surnameTrim = surname.trim();
+			this.surname = Character.toUpperCase(surnameTrim.charAt(0)) + surnameTrim.substring(1);
+		}
 	}
 	
 	public String getSurname() {
@@ -23,5 +28,10 @@ public class Surname {
 	@Override
 	public int hashCode() {
 		return surname.hashCode();
+	}
+	
+	private static final Surname EMPTY = new Surname("");
+	public static Surname getEmpty() {
+		return EMPTY;
 	}
 }

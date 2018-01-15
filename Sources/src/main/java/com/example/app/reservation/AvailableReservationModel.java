@@ -5,7 +5,7 @@ import com.example.app.core.valueobjects.Label;
 
 public class AvailableReservationModel extends DomainModel {
 	
-	private Label label;
+	private Label label = Label.getEmpty();
 	private int reservationId;
 	private int userId;
 	

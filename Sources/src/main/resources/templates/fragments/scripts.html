@@ -1,0 +1,49 @@
+<span th:fragment="scripts">
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../js/materialize.min.js"></script>
+	
+	<script th:if="${event=='user_created'}">
+		Materialize.toast('User created', 4000)
+	</script>
+	
+	<script th:if="${event=='user_created'}">
+		Materialize.toast('User deleted', 4000)
+	</script>
+	
+	<script th:if="${event=='resource_created'}">
+		Materialize.toast('Resource created', 4000)
+	</script>
+	
+	<script th:if="${event=='resource_deleted'}">
+		Materialize.toast('Resource deleted', 4000)
+	</script>
+	
+	<script th:if="${event=='users_group_created'}">
+		Materialize.toast('Users group created', 4000)
+	</script>
+	
+	<script th:if="${event=='users_group_deleted'}">
+		Materialize.toast('Users group deleted', 4000)
+	</script>
+	
+	<script th:if="${event=='added_users_to_group'}">
+		Materialize.toast('Added users to users group', 4000)
+	</script>
+	
+	<script th:if="${event=='reservation_created'}">
+		Materialize.toast('Reservation created', 4000)
+	</script>
+	
+	<script th:if="${event=='reservation_deleted'}">
+		Materialize.toast('Reservation deleted', 4000)
+	</script>
+	
+	<script th:if="${event=='reservation_made'}">
+		Materialize.toast('Reservation made', 4000)
+	</script>
+	
+	<script th:if="${event=='reservation_canceled'}">
+		Materialize.toast('Reservation canceled', 4000)
+	</script>
+</span>

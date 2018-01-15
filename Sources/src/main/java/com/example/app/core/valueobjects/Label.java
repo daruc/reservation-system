@@ -23,4 +23,9 @@ public class Label {
 	public int hashCode() {
 		return label.hashCode();
 	}
+	
+	private static final Label EMPTY = new Label("");
+	public static Label getEmpty() {
+		return EMPTY;
+	}
 }

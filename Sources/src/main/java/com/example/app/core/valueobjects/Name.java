@@ -7,8 +7,13 @@ public final class Name {
 		if (name == null) {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
-		String nameTrim = name.trim();
-		this.name = Character.toUpperCase(nameTrim.charAt(0)) + nameTrim.substring(1);
+		
+		if (name.equals("")) {
+			this.name = name;
+		} else {
+			String nameTrim = name.trim();
+			this.name = Character.toUpperCase(nameTrim.charAt(0)) + nameTrim.substring(1);
+		}
 	}
 	
 	public String getName() {
@@ -23,5 +28,10 @@ public final class Name {
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+	
+	private static final Name EMPTY = new Name("");
+	public static Name getEmpty() {
+		return EMPTY;
 	}
 }

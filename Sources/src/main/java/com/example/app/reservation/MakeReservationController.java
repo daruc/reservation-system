@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
@@ -41,7 +42,12 @@ public class MakeReservationController {
 	
 	@GetMapping("/make_reservation")
 	public String showMakeReservation(@RequestParam(name="id", required=true) int id,
+			@RequestParam(name="event", required=false) String event,
 			Model model) {
+		
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
 		
 		model.addAttribute("title", "Make reservation");
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
@@ -81,7 +87,8 @@ public class MakeReservationController {
 		dao.makeReservation(userId, availableReservationId);
 		
 		AvailableReservationModel availableReservation = dao.getMadeReservation(availableReservationId);
-		return "redirect:/make_reservation?id=" + availableReservation.getReservationId();
+		return "redirect:/make_reservation?id=" + availableReservation.getReservationId()
+			+ "&event=" + Event.RESERVATION_MADE.getName();
 	}
 	
 	@GetMapping("/cancel_reservation")
@@ -90,7 +97,8 @@ public class MakeReservationController {
 			
 		dao.cancelReservation(availableReservationId);
 		AvailableReservationModel availableReservation = dao.getMadeReservation(availableReservationId);
-		return "redirect:/make_reservation?id=" + availableReservation.getReservationId();
+		return "redirect:/make_reservation?id=" + availableReservation.getReservationId()
+			+ "&event=" + Event.RESERVATION_CANCELED.getName();
 	}
 	
 	private static class MadeReservationWrapper {

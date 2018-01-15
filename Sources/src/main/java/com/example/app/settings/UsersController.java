@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.core.Event;
 import com.example.app.core.NavigationBarController;
 import com.example.app.core.appcontroller.AccessLevel;
 import com.example.app.core.appcontroller.ApplicationController;
@@ -38,7 +39,10 @@ public class UsersController {
 	}
 	
 	@RequestMapping("/settings/users_list")
-	public String showUsersList(Model model) {
+	public String showUsersList(Model model, @RequestParam(name="event", required=false) String event) {
+		if (event != null) {
+			model.addAttribute("event", event);
+		}
 		model.addAttribute("title", "Users List");
 		NavigationBarController navigation = new NavigationBarController(httpSession, model, dao);
 		navigation.addBreadcrumb("/", "Home");
@@ -72,7 +76,7 @@ public class UsersController {
 	@GetMapping("/delete_user")
 	public String deleteUser(@RequestParam(name="id", required=true) int userId, Model model) {
 		dao.deleteUser(userId);
-		return "redirect:/settings/users_list";
+		return "redirect:/settings/users_list?event=" + Event.USER_DELETED.getName();
 	}
 
 }

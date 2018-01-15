@@ -6,8 +6,8 @@ import com.example.app.core.valueobjects.Name;
 
 public class ReservationModel extends DomainModel {
 	
-	private Name name;
-	private Description description;
+	private Name name = Name.getEmpty();
+	private Description description = Description.getEmpty();
 	private int authorId;
 	private int groupId;
 	private int resourceId;
