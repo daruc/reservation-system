@@ -1,11 +1,13 @@
 package com.example.app.reservation;
 
 import com.example.app.core.DomainModel;
+import com.example.app.core.valueobjects.Description;
+import com.example.app.core.valueobjects.Name;
 
 public class ReservationModel extends DomainModel {
 	
-	private String name;
-	private String description;
+	private Name name;
+	private Description description;
 	private int authorId;
 	private int groupId;
 	private int resourceId;
@@ -13,19 +15,19 @@ public class ReservationModel extends DomainModel {
 	private int quantity;
 	
 	public String getName() {
-		return name;
+		return name.getName();
 	}
 	public void setName(String name) {
 		if (name != null) {
-			this.name = name.trim();
+			this.name = new Name(name);
 		}
 	}
 	public String getDescription() {
-		return description;
+		return description.getDescription();
 	}
 	public void setDescription(String description) {
 		if (description != null) {
-			this.description = description.trim();
+			this.description = new Description(description);
 		}
 	}
 	public int getAuthorId() {

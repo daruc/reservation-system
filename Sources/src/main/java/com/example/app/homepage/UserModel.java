@@ -4,14 +4,16 @@ import java.util.Optional;
 
 import com.example.app.core.DomainModel;
 import com.example.app.core.appcontroller.AccessLevel;
+import com.example.app.core.valueobjects.Name;
+import com.example.app.core.valueobjects.Surname;
 
 public class UserModel extends DomainModel {
 	
 	private Optional<Integer> groupId = Optional.empty();
 	private String login;
 	private String password;
-	private String name;
-	private String surname;
+	private Name name;
+	private Surname surname;
 	private AccessLevel accessLevel;
 	
 	public void setGroupId(Integer groupId) {
@@ -41,19 +43,19 @@ public class UserModel extends DomainModel {
 		this.password = password;
 	}
 	public String getName() {
-		return name;
+		return name.getName();
 	}
 	public void setName(String name) {
 		if (name != null) {
-			this.name = name.trim();
+			this.name = new Name(name);
 		}
 	}
 	public String getSurname() {
-		return surname;
+		return surname.getSurname();
 	}
 	public void setSurname(String surname) {
 		if (surname != null) {
-			this.surname = surname.trim();
+			this.surname = new Surname(surname);
 		}
 	}
 	public int getAccessLevel() {
@@ -66,6 +68,6 @@ public class UserModel extends DomainModel {
 		if (name == null && surname == null) {
 			return login;
 		}
-		return name + ' ' + surname;
+		return name.getName() + ' ' + surname.getSurname();
 	}
 }
