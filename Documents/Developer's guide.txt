@@ -1,6 +1,9 @@
+Project repository:
+* http://github.com/daruc/reservation-system
+
 Running requirements:
 * Java 8,
-* PostgreSQL,
+* PostgreSQL 9.6.6,
 * Browser.
 
 Building requirements:
